@@ -1,0 +1,26 @@
+/* Home */
+.hero {
+  min-height: 375px;
+  background-image: url('/images/arena_bg.jpg') !important;
+  background-position: center !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+}
+
+.hero-main {
+  margin-top: 1em !important;
+  font-size: 3em !important;
+}
+
+.hero-secondary {
+  margin-bottom: 1em !important;
+}
+
+.events,
+.footer {
+  padding: 3em 0 !important;
+}
+
+/* Feed */
+
+/* Footer */
