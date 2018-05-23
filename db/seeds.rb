@@ -5,3 +5,30 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+League.destroy_all
+
+League.create!([{
+  name: "Major League Baseball",
+  canonical: "mlb",
+  website: "https://www.mlb.com/",
+  short_name: "MLB",
+},
+{
+  name: "National Basketball Association",
+  canonical: "nba",
+  website: "https://www.nba.com/",
+  short_name: "NBA",
+},
+{
+  name: "National Hockey League",
+  canonical: "nhl",
+  website: "https://www.nhl.com/",
+  short_name: "NHL",
+},
+{
+  name: "Major League Soccer",
+  canonical: "mls",
+  website: "https://www.mlssoccer.com/",
+  short_name: "MLS",
+}])
