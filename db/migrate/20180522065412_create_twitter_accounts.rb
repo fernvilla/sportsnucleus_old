@@ -3,7 +3,6 @@ class CreateTwitterAccounts < ActiveRecord::Migration[5.2]
     create_table :twitter_accounts do |t|
       t.string :screen_name
       t.string :account_type
-      t.integer :user_id
       t.references :team, foreign_key: true
 
       t.timestamps

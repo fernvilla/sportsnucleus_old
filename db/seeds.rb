@@ -32,3 +32,21 @@ League.create!([{
   website: "https://www.mlssoccer.com/",
   short_name: "MLS",
 }])
+
+Team.destroy_all
+
+Team.create!([{
+  name: "Los Angeles Dodgers",
+  short_name: "Dodgers",
+  canonical: "dodgers",
+  website: "https://www.mlb.com/dodgers",
+  league_id: 1,
+}])
+
+TwitterAccount.destroy_all
+
+TwitterAccount.create!([{
+  screen_name: "Dodgers",
+  account_type: "Team",
+  team_id: 1
+}])

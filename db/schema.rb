@@ -52,7 +52,6 @@ ActiveRecord::Schema.define(version: 2018_05_22_070257) do
   create_table "twitter_accounts", force: :cascade do |t|
     t.string "screen_name"
     t.string "account_type"
-    t.integer "user_id"
     t.bigint "team_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
