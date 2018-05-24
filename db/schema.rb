@@ -39,14 +39,14 @@ ActiveRecord::Schema.define(version: 2018_05_22_070257) do
     t.text "text"
     t.string "tweet_id"
     t.datetime "published"
-    t.bigint "twitter_account_id"
+    t.bigint "team_id"
     t.string "screen_name"
     t.string "name"
     t.string "profile_image_url"
     t.string "image_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["twitter_account_id"], name: "index_tweets_on_twitter_account_id"
+    t.index ["team_id"], name: "index_tweets_on_team_id"
   end
 
   create_table "twitter_accounts", force: :cascade do |t|
@@ -59,6 +59,6 @@ ActiveRecord::Schema.define(version: 2018_05_22_070257) do
   end
 
   add_foreign_key "teams", "leagues"
-  add_foreign_key "tweets", "twitter_accounts"
+  add_foreign_key "tweets", "teams"
   add_foreign_key "twitter_accounts", "teams"
 end

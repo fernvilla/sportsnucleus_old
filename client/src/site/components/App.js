@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Segment, Container } from 'semantic-ui-react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import { Nav, Home } from '.';
+import { Nav, Home, Feed } from '.';
 
 import './../../stylesheets/app.css';
 
@@ -14,8 +13,10 @@ class App extends Component {
           <Home />
         </Segment>
 
-        <Segment basic className="feed-container">
-          <Container>Content here</Container>
+        <Segment basic>
+          <Container>
+            <Feed />
+          </Container>
         </Segment>
       </div>
     );

@@ -5,7 +5,7 @@ class TweetsController < ApplicationController
   def index
     @tweets = Tweet.all
 
-    render json: @tweets
+    render json: @tweets, include: :team
   end
 
   # GET /tweets/1

@@ -4,7 +4,7 @@ class CreateTweets < ActiveRecord::Migration[5.2]
       t.text :text
       t.string :tweet_id
       t.datetime :published
-      t.references :twitter_account, foreign_key: true
+      t.references :team, foreign_key: true
       t.string :screen_name
       t.string :name
       t.string :profile_image_url
