@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
   scope "/api" do
-    resources :tweets
+    resources :tweets do
+      collection do
+        get 'paginated_tweets'
+      end
+    end
+
     resources :twitter_accounts
     resources :teams
     resources :leagues

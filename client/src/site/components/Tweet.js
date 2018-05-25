@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import classNames from 'classnames';
 import moment from 'moment';
-// import LazyLoad from 'react-lazyload';
 import { Card, Image, Icon, Popup } from 'semantic-ui-react';
 import momentCustom from './../utils/momentCustom';
 
@@ -15,9 +13,8 @@ export default class Tweet extends Component {
 
   render() {
     const { tweet } = this.props;
-    console.log(tweet);
     const {
-      team: { canonical, name }
+      team: { name }
     } = tweet;
 
     const timeSince = moment

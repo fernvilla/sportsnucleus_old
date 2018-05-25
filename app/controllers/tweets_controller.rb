@@ -1,19 +1,33 @@
 class TweetsController < ApplicationController
   before_action :set_tweet, only: [:show, :update, :destroy]
 
-  # GET /tweets
   def index
     @tweets = Tweet.all.order("published DESC")
 
     render json: @tweets, include: :team
   end
 
-  # GET /tweets/1
+  def paginated_tweets
+    @tweets = Tweet.order('published DESC').page(params[:page])
+
+    render json: {
+      tweets: @tweets,
+      # Necessary meta data to make the PaginatorSection component work
+      meta: {
+        current_page: @tweets.current_page,
+        next_page: @tweets.next_page,
+        prev_page: @tweets.prev_page,
+        total_pages: @tweets.total_pages,
+        total_count: @tweets.total_count,
+        last_page: @tweets.last_page?  
+      }
+    }, include: :team
+  end
+
   def show
     render json: @tweet
   end
 
-  # POST /tweets
   def create
     @tweet = Tweet.new(tweet_params)
 
@@ -24,7 +38,6 @@ class TweetsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /tweets/1
   def update
     if @tweet.update(tweet_params)
       render json: @tweet
@@ -33,18 +46,15 @@ class TweetsController < ApplicationController
     end
   end
 
-  # DELETE /tweets/1
   def destroy
     @tweet.destroy
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_tweet
       @tweet = Tweet.find(params[:id])
     end
 
-    # Only allow a trusted parameter "white list" through.
     def tweet_params
       params.require(:tweet).permit(:text, :tweet_id, :published, :twitter_account_id, :screen_name, :name, :profile_image_url, :image_url)
     end
