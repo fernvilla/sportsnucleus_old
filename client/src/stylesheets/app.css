@@ -35,6 +35,10 @@ body {
   justify-content: space-around;
 }
 
+.ui.card .header {
+  word-wrap: break-word;
+}
+
 .ui.card .header a {
   color: #333;
 }

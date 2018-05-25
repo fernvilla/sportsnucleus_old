@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+// import classNames from 'classnames';
 import moment from 'moment';
 // import LazyLoad from 'react-lazyload';
-import { Card, Image, Icon } from 'semantic-ui-react';
+import { Card, Image, Icon, Popup } from 'semantic-ui-react';
 import momentCustom from './../utils/momentCustom';
 
 momentCustom();
@@ -41,7 +41,7 @@ export default class Tweet extends Component {
         )}
 
         <Card.Content>
-          {/*<Image floated="right" size="mini" src={tweet.profile_image_url} rounded bordered />*/}
+          <Image floated="right" size="mini" src={tweet.profile_image_url} rounded bordered />
 
           <Card.Header>
             <a href={tweetLink} target="_blank" rel="noopener noreferrer">
@@ -64,21 +64,52 @@ export default class Tweet extends Component {
 
         <Card.Content extra>
           <div className="card-extra-content">
-            <a
-              href={`https://twitter.com/intent/tweet?in_reply_to=${tweet.tweet_id}`}
-              title="Reply">
-              <Icon link fitted inverted color="black" name="reply" />
-            </a>
+            <Popup
+              inverted
+              size="mini"
+              trigger={
+                <a href={`https://twitter.com/intent/tweet?in_reply_to=${tweet.tweet_id}`}>
+                  <Icon link fitted inverted color="black" name="reply" />
+                </a>
+              }
+              content="Reply to tweet"
+            />
 
-            <a href={`https://twitter.com/intent/like?tweet_id=${tweet.tweet_id}`} title="Like">
-              <Icon link fitted inverted color="black" name="empty heart" />
-            </a>
+            <Popup
+              inverted
+              size="mini"
+              trigger={
+                <a href={`https://twitter.com/intent/like?tweet_id=${tweet.tweet_id}`}>
+                  <Icon link fitted inverted color="black" name="empty heart" />
+                </a>
+              }
+              content="Like tweet"
+            />
 
-            <a
-              href={`https://twitter.com/intent/retweet?tweet_id=${tweet.tweet_id}`}
-              title="Retweet">
-              <Icon link fitted inverted color="black" name="retweet" />
-            </a>
+            <Popup
+              inverted
+              size="mini"
+              trigger={
+                <a href={`https://twitter.com/intent/retweet?tweet_id=${tweet.tweet_id}`}>
+                  <Icon link fitted inverted color="black" name="retweet" />
+                </a>
+              }
+              content="Retweet"
+            />
+
+            <Popup
+              inverted
+              size="mini"
+              trigger={
+                <a
+                  href={`mailto:?subject=Check out this tweet &body=${
+                    tweet.text
+                  } ${tweetLink} via http://www.sportsnucleus.io`}>
+                  <Icon link fitted inverted color="black" name="mail outline" />
+                </a>
+              }
+              content="Share via email"
+            />
           </div>
         </Card.Content>
       </Card>
