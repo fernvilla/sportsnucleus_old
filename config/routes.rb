@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   scope "/api" do
     resources :tweets do
       collection do
-        get 'paginated_tweets'
+        get 'paginated'
       end
     end
 

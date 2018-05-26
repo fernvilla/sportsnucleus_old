@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Card, Image, Icon, Popup } from 'semantic-ui-react';
+// import LazyLoad from 'react-lazyload';
 import momentCustom from './../utils/momentCustom';
 
 momentCustom();

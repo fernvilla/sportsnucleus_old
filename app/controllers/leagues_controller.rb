@@ -3,9 +3,9 @@ class LeaguesController < ApplicationController
 
   # GET /leagues
   def index
-    @leagues = League.all
+    @leagues = League.all.order("short_name DESC")
 
-    render json: @leagues
+    render json: @leagues, include: :teams
   end
 
   # GET /leagues/1

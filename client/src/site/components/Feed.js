@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Card, Loader } from 'semantic-ui-react';
+import { Card, Loader, Container } from 'semantic-ui-react';
 import Masonry from 'react-masonry-component';
 import { Tweet } from '.';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -19,7 +19,7 @@ export default class Feed extends Component {
   fetchTweets = (page = 1) => {
     console.log('fetching page', page);
     axios
-      .get(`/api/tweets/paginated_tweets?page=${page}`)
+      .get(`${this.props.path}?page=${page}`)
       .then(({ data }) => {
         this.setState(prevState => ({
           tweets: [...prevState.tweets, ...data.tweets],
@@ -46,7 +46,7 @@ export default class Feed extends Component {
     }
 
     return (
-      <div>
+      <Container>
         <Masonry
           options={{
             itemSelector: '.card',
@@ -54,12 +54,12 @@ export default class Feed extends Component {
             transitionDuration: 0
           }}>
           <InfiniteScroll pageStart={1} loadMore={this.fetchTweets} hasMore={hasMoreItems}>
-            <Card.Group itemsPerRow={4} stackable doubling>
+            <Card.Group itemsPerRow={3} stackable doubling>
               {this.renderFeed()}
             </Card.Group>
           </InfiniteScroll>
         </Masonry>
-      </div>
+      </Container>
     );
   }
 }

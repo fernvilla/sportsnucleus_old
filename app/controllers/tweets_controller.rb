@@ -7,7 +7,7 @@ class TweetsController < ApplicationController
     render json: @tweets, include: :team
   end
 
-  def paginated_tweets
+  def paginated
     @tweets = Tweet.order('published DESC').page(params[:page])
 
     render json: {
