@@ -43,6 +43,15 @@ Team.create!([{
   league_id: 1,
 }])
 
+Team.create!([{
+  name: "Los Angeles Lakers",
+  short_name: "Lakers",
+  canonical: "lakers",
+  website: "https://www.lakers.com",
+  league_id: 2,
+}])
+
+
 TwitterAccount.destroy_all
 
 TwitterAccount.create!([{
@@ -50,3 +59,11 @@ TwitterAccount.create!([{
   account_type: "Team",
   team_id: 1
 }])
+
+
+TwitterAccount.create!([{
+  screen_name: "Lakers",
+  account_type: "Team",
+  team_id: 2
+}])
+

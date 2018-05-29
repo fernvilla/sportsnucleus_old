@@ -3,7 +3,10 @@ import axios from 'axios';
 import { Card, Loader, Container } from 'semantic-ui-react';
 import Masonry from 'react-masonry-component';
 import { Tweet } from '.';
-import InfiniteScroll from 'react-infinite-scroller';
+// import InfiniteScroll from 'react-infinite-scroller';
+import momentCustom from './../utils/momentCustom';
+
+momentCustom();
 
 export default class Feed extends Component {
   state = {
@@ -22,9 +25,10 @@ export default class Feed extends Component {
       .get(`${this.props.path}?page=${page}`)
       .then(({ data }) => {
         this.setState(prevState => ({
-          tweets: [...prevState.tweets, ...data.tweets],
-          tweetsFetched: true,
-          hasMoreItems: !data.meta.last_page
+          // tweets: [...prevState.tweets, ...data.tweets],
+          tweets: data,
+          tweetsFetched: true
+          // hasMoreItems: data.meta.total_pages !== page
         }));
       })
       .catch(err => console.error(err));
@@ -53,11 +57,11 @@ export default class Feed extends Component {
             percentPosition: true,
             transitionDuration: 0
           }}>
-          <InfiniteScroll pageStart={1} loadMore={this.fetchTweets} hasMore={hasMoreItems}>
-            <Card.Group itemsPerRow={3} stackable doubling>
-              {this.renderFeed()}
-            </Card.Group>
-          </InfiniteScroll>
+          {/*<InfiniteScroll pageStart={1} loadMore={this.fetchTweets} hasMore={hasMoreItems}>*/}
+          <Card.Group itemsPerRow={3} stackable doubling>
+            {this.renderFeed()}
+          </Card.Group>
+          {/*</InfiniteScroll>*/}
         </Masonry>
       </Container>
     );

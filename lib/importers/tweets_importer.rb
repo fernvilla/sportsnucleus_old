@@ -26,8 +26,6 @@ class TweetsImporter
         next unless defined? data
 
         data.each do |d|
-          next unless (Date.today - d.created_at.to_date).to_i <= 1
-
           tweet_id = d.to_h[:id_str]
           media = d.to_h[:entities][:media]
           image = media ? media.first[:media_url_https] : nil

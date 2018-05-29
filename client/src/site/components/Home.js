@@ -22,7 +22,7 @@ const Home = () => {
       </Segment>
 
       <Segment basic>
-        <Feed path="/api/tweets/paginated" />
+        <Feed path="/api/tweets" />
       </Segment>
     </Fragment>
   );
