@@ -2,19 +2,26 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const mongoose = require('mongoose');
-const db = mongoose.connection;
+const cors = require('cors');
+const helmet = require('helmet');
+const compression = require('compression');
 
 const app = express();
 
-mongoose.connect('mongodb://localhost/sportsnucleus');
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () => console.log('connected to db'));
-
+app.use(compression());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+// Connect to the database
+const database = require('./config/database.js');
+
+// secure apps by setting various HTTP headers
+app.use(helmet());
+
+// enable CORS - Cross Origin Resource Sharing
+app.use(cors());
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, './../client/build')));

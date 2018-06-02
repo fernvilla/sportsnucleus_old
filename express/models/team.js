@@ -5,7 +5,7 @@ const TeamSchema = new Schema({
     type: String,
     required: true
   },
-  canonical: {
+  slug: {
     type: String,
     required: true
   },

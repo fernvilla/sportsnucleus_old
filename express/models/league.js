@@ -3,11 +3,13 @@ const Schema = mongoose.Schema;
 const LeagueSchema = new Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
-  canonical: {
+  slug: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   website: {
     type: String,
@@ -15,13 +17,13 @@ const LeagueSchema = new Schema({
   },
   shortName: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   teams: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'Team',
-      required: true
+      ref: 'Team'
     }
   ]
 });
