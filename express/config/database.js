@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const chalk = require('chalk');
 
 const uristring =
-  process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/sportsnewsla';
+  process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/sportsnucleus';
 const connected = chalk.bold.cyan;
 const error = chalk.bold.yellow;
 const disconnected = chalk.bold.red;

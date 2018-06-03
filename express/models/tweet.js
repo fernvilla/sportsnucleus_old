@@ -20,21 +20,24 @@ const TweetSchema = new Schema(
       ref: 'TwitterAccount',
       required: true
     },
-    screenName: {
-      type: String,
-      required: true,
-      unique: true
-    },
     userName: {
       type: String,
       required: true
     },
-    profileImage: String
+    profileImageUrl: String
   },
   {
     timestamps: true
   }
 );
+
+TweetSchema.pre('save', function(next) {
+  const self = this;
+
+  Tweet.find({ tweetId: self.tweetId }, (err, docs) => {
+    if (!docs.length) next();
+  });
+});
 
 const Tweet = mongoose.model('Tweet', TweetSchema);
 

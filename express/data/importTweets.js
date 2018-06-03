@@ -1,11 +1,11 @@
 require('dotenv').config();
 
-const database = require('./../connection');
-const mongoose = require('mongoose');
+const TwitterAccount = require('./../models/twitterAccount');
 const Tweet = require('./../models/tweet');
-const Team = require('./../models/team');
-
 const Twit = require('twit');
+const database = require('./../config/database.js');
+const mongoose = require('mongoose');
+
 const T = new Twit({
   consumer_key: process.env.TWITTER_CONSUMER_KEY,
   consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
@@ -13,11 +13,34 @@ const T = new Twit({
   timeout_ms: 60 * 1000
 });
 
-const fetchTweets = (team, screenName) => {
+mongoose.connection.on('connected', () => {
+  initParser();
+});
+
+const disconnectDb = () => {
+  mongoose.disconnect();
+};
+
+const initParser = () => {
+  TwitterAccount.find({}).exec((err, twitterAccounts) => {
+    if (!twitterAccounts.length) return disconnectDb();
+
+    if (err) return disconnectDb();
+
+    twitterAccounts.map(twitterAccount => fetchTweets(twitterAccount));
+  });
+
+  //TODO: find better way of disconnecting
+  setTimeout(() => {
+    disconnectDb();
+  }, 30000);
+};
+
+const fetchTweets = twitterAccount => {
   T.get(
     'statuses/user_timeline',
     {
-      screen_name: screenName,
+      screen_name: twitterAccount.screenName,
       count: 30,
       include_rts: true,
       exclude_replies: true
@@ -30,41 +53,23 @@ const fetchTweets = (team, screenName) => {
           text: d.text,
           tweetId: d.id_str,
           published: d.created_at,
-          screenName: d.user.screen_name,
           userName: d.user.name,
-          profileImage: d.user.profile_image_url
+          profileImageUrl: d.user.profile_image_url,
+          twitterAccount: twitterAccount._id
         });
 
-        Team.findOne({ canonical: team }, (err, team) => {
+        tweet.save((err, tweet) => {
           if (err) return console.log(err);
 
-          tweet.team = team._id;
+          twitterAccount.tweets.push(tweet);
 
-          tweet.save((err, tweet) => {
+          twitterAccount.save((err, twitterAccount) => {
             if (err) return console.log(err);
 
-            team.tweets.push(tweet);
-
-            team.save((err, team) => {
-              if (err) return console.log(err);
-
-              console.log('Tweet created: ', tweet);
-            });
+            console.log('Tweet created: ', tweet);
           });
         });
       });
     }
   );
 };
-
-mongoose.connection.on('connected', () => {
-  users.map(u => {
-    return u.screenNames.map(name => {
-      return fetchTweets(u.team, name);
-    });
-  });
-
-  setTimeout(function() {
-    mongoose.disconnect();
-  }, 10000);
-});

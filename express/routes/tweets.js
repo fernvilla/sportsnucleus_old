@@ -3,11 +3,14 @@ const router = express.Router();
 const Tweet = require('./../models/tweet');
 const TwitterAccount = require('./../models/twitterAccount');
 const moment = require('moment');
-const start = moment.subtract(24, 'hours').toDate();
+const start = moment()
+  .subtract(24, 'hours')
+  .toDate();
 
 router.route('/').get((req, res) => {
   Tweet.find({})
     .lean()
+    .populate('twitterAccount', 'screenName')
     .sort({ published: 'desc' })
     .exec((err, tweets) => {
       if (err) {
