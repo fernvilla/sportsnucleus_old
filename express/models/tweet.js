@@ -15,9 +15,9 @@ const TweetSchema = new Schema(
       type: Date,
       required: true
     },
-    team: {
+    twitterAccount: {
       type: Schema.Types.ObjectId,
-      ref: 'Team',
+      ref: 'TwitterAccount',
       required: true
     },
     screenName: {
