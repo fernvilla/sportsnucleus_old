@@ -21,19 +21,16 @@ const disconnectDb = () => {
   mongoose.disconnect();
 };
 
+let processedAccounts = 0;
+let totalAccounts = 0;
+
 const initParser = () => {
   TwitterAccount.find({}).exec((err, twitterAccounts) => {
-    if (!twitterAccounts.length) return disconnectDb();
+    if (err || !twitterAccounts.length) return disconnectDb();
 
-    if (err) return disconnectDb();
-
+    totalAccounts = twitterAccounts.length;
     twitterAccounts.map(twitterAccount => fetchTweets(twitterAccount));
   });
-
-  //TODO: find better way of disconnecting
-  setTimeout(() => {
-    disconnectDb();
-  }, 30000);
 };
 
 const fetchTweets = twitterAccount => {
@@ -49,27 +46,44 @@ const fetchTweets = twitterAccount => {
       if (err) return console.log(err);
 
       return data.map(d => {
+        const media = d.entities.media;
+
         const tweet = new Tweet({
           text: d.text,
           tweetId: d.id_str,
           published: d.created_at,
           userName: d.user.name,
           profileImageUrl: d.user.profile_image_url,
-          twitterAccount: twitterAccount._id
+          twitterAccount: twitterAccount._id,
+          imageUrl: media ? media[0].media_url_https : null
         });
 
         tweet.save((err, tweet) => {
-          if (err) return console.log(err);
+          if (err) {
+            checkForDisconnect();
+            return console.log(err);
+          }
 
           twitterAccount.tweets.push(tweet);
 
           twitterAccount.save((err, twitterAccount) => {
-            if (err) return console.log(err);
+            if (err) {
+              return console.log(err);
+            }
 
+            checkForDisconnect();
             console.log('Tweet created: ', tweet);
           });
         });
       });
     }
   );
+};
+
+const checkForDisconnect = () => {
+  processedAccounts++;
+
+  if (processedAccounts === totalAccounts) {
+    disconnectDb();
+  }
 };

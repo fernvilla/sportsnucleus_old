@@ -24,6 +24,7 @@ const TweetSchema = new Schema(
       type: String,
       required: true
     },
+    imageUrl: String,
     profileImageUrl: String
   },
   {

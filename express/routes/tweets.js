@@ -10,7 +10,15 @@ const start = moment()
 router.route('/').get((req, res) => {
   Tweet.find({})
     .lean()
-    .populate('twitterAccount', 'screenName')
+    .populate({
+      path: 'twitterAccount',
+      select: 'screenName',
+      populate: {
+        path: 'team',
+        model: 'Team',
+        select: 'name'
+      }
+    })
     .sort({ published: 'desc' })
     .exec((err, tweets) => {
       if (err) {
