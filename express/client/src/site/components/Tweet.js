@@ -19,10 +19,10 @@ const Tweet = ({ tweet }) => {
 
   return (
     <Card raised fluid>
-      {tweet.image_url && (
+      {tweet.imageUrl && (
         <Image
           href={tweetLink}
-          src={tweet.image_url}
+          src={tweet.imageUrl}
           centered
           alt="tweet"
           target="_blank"
