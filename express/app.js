@@ -20,7 +20,7 @@ const database = require('./config/database.js');
 // secure apps by setting various HTTP headers
 app.use(helmet());
 
-// enable CORS - Cross Origin Resource Sharing
+// enable CORS
 app.use(cors());
 
 // Serve static files from the React app
@@ -30,6 +30,7 @@ app.use(express.static(path.join(__dirname, './../client/build')));
 app.use('/api/leagues', require('./routes/leagues'));
 app.use('/api/teams', require('./routes/teams'));
 app.use('/api/twitter_accounts', require('./routes/twitterAccounts'));
+app.use('/api/tweets', require('./routes/tweets'));
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.

@@ -7,7 +7,8 @@ router
   .get((req, res) => {
     League.find({})
       .lean()
-      .populate('teams')
+      .populate('teams', 'slug shortName name')
+      .sort({ name: 'desc' })
       .exec((err, leagues) => {
         if (err) {
           return res.status(500).json({
@@ -49,16 +50,18 @@ router
 router
   .route('/:league_id')
   .get((req, res) => {
-    League.findById(req.params.league_id, (err, league) => {
-      if (err) {
-        return res.status(400).json({
-          error: err,
-          message: 'There was an error retrieving league.'
-        });
-      }
+    League.findById(req.params.league_id)
+      .populate('teams', 'slug shortName name')
+      .exec((err, league) => {
+        if (err) {
+          return res.status(400).json({
+            error: err,
+            message: 'There was an error retrieving league.'
+          });
+        }
 
-      res.status(200).json({ payload: league });
-    });
+        res.status(200).json({ payload: league });
+      });
   })
   .put((req, res) => {
     League.findByIdAndUpdate(req.params.league_id, req.body, { new: true }, (err, league) => {

@@ -3,11 +3,13 @@ const Schema = mongoose.Schema;
 const TeamSchema = new Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   slug: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   website: {
     type: String,
@@ -25,8 +27,7 @@ const TeamSchema = new Schema({
   twitterAccounts: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'TwitterAccount',
-      required: true
+      ref: 'TwitterAccount'
     }
   ]
 });

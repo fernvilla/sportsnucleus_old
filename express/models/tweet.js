@@ -8,7 +8,8 @@ const TweetSchema = new Schema(
     },
     tweetId: {
       type: String,
-      required: true
+      required: true,
+      unique: true
     },
     published: {
       type: Date,
@@ -21,7 +22,8 @@ const TweetSchema = new Schema(
     },
     screenName: {
       type: String,
-      required: true
+      required: true,
+      unique: true
     },
     userName: {
       type: String,

@@ -8,7 +8,7 @@ router
   .get((req, res) => {
     Team.find({})
       .lean()
-      .populate('league')
+      .sort({ name: 'desc' })
       .exec((err, teams) => {
         if (err) {
           return res.status(500).json({
@@ -74,16 +74,18 @@ router
 router
   .route('/:team_id')
   .get((req, res) => {
-    Team.findById(req.params.team_id, (err, team) => {
-      if (err) {
-        return res.status(400).json({
-          error: err,
-          message: 'There was an error retrieving team.'
-        });
-      }
+    Team.findById(req.params.team_id)
+      .populate('twitterAccounts')
+      .exec((err, team) => {
+        if (err) {
+          return res.status(400).json({
+            error: err,
+            message: 'There was an error retrieving team.'
+          });
+        }
 
-      res.status(200).json({ payload: team });
-    });
+        res.status(200).json({ payload: team });
+      });
   })
   .put((req, res) => {
     Team.findByIdAndUpdate(req.params.team_id, req.body, { new: true }, (err, team) => {
@@ -109,7 +111,7 @@ router
         });
 
       //Pull team from league
-      League.update({ _id: team.league._id }, { $pull: { team: team._id } }, err => {
+      League.findByIdAndUpdate(team.league._id, { $pull: { teams: team._id } }, err => {
         if (err) {
           return res.status(400).json({
             error: err,

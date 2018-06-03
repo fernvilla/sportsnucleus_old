@@ -1,0 +1,41 @@
+const express = require('express');
+const router = express.Router();
+const Tweet = require('./../models/tweet');
+const moment = require('moment');
+const start = moment.subtract(24, 'hours').toDate();
+
+router.route('/').get((req, res) => {
+  Tweet.find({})
+    .lean()
+    .sort({ published: 'desc' })
+    .exec((err, tweets) => {
+      if (err) {
+        return res.status(500).json({
+          error: err,
+          message: 'There was an error retrieving tweets.'
+        });
+      }
+
+      res.status(200).json({ payload: tweets });
+    });
+});
+
+router.get('/last_day', (req, res) => {
+  Tweet.find({})
+    .lean()
+    .populate('team', 'name slug')
+    .where('published')
+    .gte(start)
+    .sort({ published: 'desc' })
+    .exec((err, tweets) => {
+      if (err)
+        return res.status(500).json({
+          error: err,
+          message: 'There was an error retrieving tweets'
+        });
+
+      res.status(200).json({ payload: tweets });
+    });
+});
+
+module.exports = router;
