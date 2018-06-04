@@ -40,11 +40,12 @@ router.get('/last_day', (req, res) => {
     .gte(start)
     .sort({ published: 'desc' })
     .exec((err, tweets) => {
-      if (err)
+      if (err) {
         return res.status(500).json({
           error: err,
           message: 'There was an error retrieving tweets'
         });
+      }
 
       res.status(200).json({ payload: tweets });
     });

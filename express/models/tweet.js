@@ -36,7 +36,11 @@ TweetSchema.pre('save', function(next) {
   const self = this;
 
   Tweet.find({ tweetId: self.tweetId }, (err, docs) => {
-    if (!docs.length) next();
+    if (!docs.length) {
+      next();
+    } else {
+      next(new Error('Tweet exists!'));
+    }
   });
 });
 

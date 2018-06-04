@@ -10,7 +10,8 @@
     "heroku-postbuild": "cd client && yarn --production=false && yarn run build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "seed": "node ./data/seed",
-    "import:tweets": "node ./data/importTweets"
+    "import:tweets": "node ./data/importTweets",
+    "prune:tweets": "node ./data/pruneTweets"
   },
   "dependencies": {
     "chalk": "^2.4.1",

@@ -26,6 +26,14 @@ const initParser = () => {
   });
 };
 
+const checkForDisconnect = () => {
+  processedAccounts++;
+
+  if (processedAccounts === totalAccounts) {
+    disconnectDb();
+  }
+};
+
 let processedAccounts = 0;
 let totalAccounts = 0;
 
@@ -45,15 +53,11 @@ const fetchTweets = screenName => {
     'statuses/user_timeline',
     {
       screen_name: screenName,
-      count: 30,
       include_rts: true,
       exclude_replies: true
     },
     (err, data, response) => {
-      if (err) {
-        checkForDisconnect();
-        return console.log('twitter response error: ', err);
-      }
+      if (err || !data.length) return checkForDisconnect();
 
       totalTweets = data.length;
 
@@ -100,12 +104,4 @@ const fetchTweets = screenName => {
       });
     }
   );
-};
-
-const checkForDisconnect = () => {
-  processedAccounts++;
-
-  if (processedAccounts === totalAccounts) {
-    disconnectDb();
-  }
 };
