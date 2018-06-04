@@ -1,1 +1,1 @@
-web: bundle exec rails s
+web: node ./server/app

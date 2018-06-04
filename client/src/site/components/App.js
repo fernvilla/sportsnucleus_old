@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Loader } from 'semantic-ui-react';
 import { Nav, Home } from '.';
 
-import './../../stylesheets/app.css';
+import './../stylesheets/site.css';
 
 class App extends Component {
   state = {
@@ -19,8 +19,8 @@ class App extends Component {
   fetchleagues() {
     axios
       .get(`/api/leagues`)
-      .then(({ data }) => {
-        this.setState({ leagues: data, leaguesFetched: true });
+      .then(({ data: { payload } }) => {
+        this.setState({ leagues: payload, leaguesFetched: true });
       })
       .catch(err => console.error(err));
   }

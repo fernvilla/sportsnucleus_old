@@ -2,11 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Card, Image, Icon, Popup } from 'semantic-ui-react';
-// import LazyLoad from 'react-lazyload';
 
 const Tweet = ({ tweet }) => {
   const {
-    team: { name }
+    twitterAccount: {
+      team: { name }
+    }
   } = tweet;
 
   const timeSince = moment
@@ -14,14 +15,14 @@ const Tweet = ({ tweet }) => {
     .startOf('minutes')
     .fromNow();
 
-  const tweetLink = `https://twitter.com/i/web/status/${tweet.tweet_id}`;
+  const tweetLink = `https://twitter.com/i/web/status/${tweet.tweetId}`;
 
   return (
     <Card raised fluid>
-      {tweet.image_url && (
+      {tweet.imageUrl && (
         <Image
           href={tweetLink}
-          src={tweet.image_url}
+          src={tweet.imageUrl}
           centered
           alt="tweet"
           target="_blank"
@@ -30,7 +31,7 @@ const Tweet = ({ tweet }) => {
       )}
 
       <Card.Content>
-        <Image floated="right" size="mini" src={tweet.profile_image_url} rounded bordered />
+        <Image floated="right" size="mini" src={tweet.profileImageUrl} rounded bordered />
 
         <Card.Header>
           <a href={tweetLink} target="_blank" rel="noopener noreferrer">
@@ -46,7 +47,9 @@ const Tweet = ({ tweet }) => {
         <Card.Description>
           <div>{name}</div>
           <div>
-            <a href={`https://www.twitter.com/${tweet.screen_name}`}>@{tweet.screen_name}</a>
+            <a href={`https://www.twitter.com/${tweet.twitterAccount.screenName}`}>
+              @{tweet.twitterAccount.screenName}
+            </a>
           </div>
         </Card.Description>
       </Card.Content>
@@ -57,7 +60,7 @@ const Tweet = ({ tweet }) => {
             inverted
             size="mini"
             trigger={
-              <a href={`https://twitter.com/intent/tweet?in_reply_to=${tweet.tweet_id}`}>
+              <a href={`https://twitter.com/intent/tweet?in_reply_to=${tweet.tweetId}`}>
                 <Icon link fitted inverted color="black" name="reply" />
               </a>
             }
@@ -68,7 +71,7 @@ const Tweet = ({ tweet }) => {
             inverted
             size="mini"
             trigger={
-              <a href={`https://twitter.com/intent/like?tweet_id=${tweet.tweet_id}`}>
+              <a href={`https://twitter.com/intent/like?tweet_id=${tweet.tweetId}`}>
                 <Icon link fitted inverted color="black" name="empty heart" />
               </a>
             }
@@ -79,7 +82,7 @@ const Tweet = ({ tweet }) => {
             inverted
             size="mini"
             trigger={
-              <a href={`https://twitter.com/intent/retweet?tweet_id=${tweet.tweet_id}`}>
+              <a href={`https://twitter.com/intent/retweet?tweet_id=${tweet.tweetId}`}>
                 <Icon link fitted inverted color="black" name="retweet" />
               </a>
             }
