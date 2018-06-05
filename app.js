@@ -24,7 +24,7 @@ app.use(helmet());
 app.use(cors());
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, './../client/build')));
+app.use(express.static(path.join(__dirname, './client/build')));
 
 // API endpoints
 app.use('/api/leagues', require('./routes/leagues'));
@@ -32,10 +32,10 @@ app.use('/api/teams', require('./routes/teams'));
 app.use('/api/twitter_accounts', require('./routes/twitterAccounts'));
 app.use('/api/tweets', require('./routes/tweets'));
 
-// The "catchall" handler: for any request that doesn't
+// The "catch all" handler: for any request that doesn't
 // match one above, send back React's index.html file.
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname + './../../client/build/index.html'));
+  res.sendFile(path.join(__dirname + './client/build/index.html'));
 });
 
 module.exports = app;
