@@ -44,6 +44,4 @@ TweetSchema.pre('save', function(next) {
   });
 });
 
-const Tweet = mongoose.model('Tweet', TweetSchema);
-
-module.exports = Tweet;
+module.exports = Tweet = mongoose.model('Tweet', TweetSchema);

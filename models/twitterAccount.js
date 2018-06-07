@@ -21,6 +21,4 @@ const TwitterAccountSchema = new Schema({
   ]
 });
 
-const TwitterAccount = mongoose.model('TwitterAccount', TwitterAccountSchema);
-
-module.exports = TwitterAccount;
+module.exports = TwitterAccount = mongoose.model('TwitterAccount', TwitterAccountSchema);
