@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const TwitterAccount = require('./../models/twitterAccount');
-const Team = require('./../models/team');
+const TwitterAccount = require('./../../models/TwitterAccount');
+const Team = require('./../../models/Team');
 
 router
   .route('/')
@@ -16,7 +16,7 @@ router
           });
         }
 
-        res.status(200).json({ payload: twitterAccounts });
+        res.json({ payload: twitterAccounts });
       });
   })
   .post((req, res) => {
@@ -59,7 +59,7 @@ router
             });
           }
 
-          res.status(200).json({
+          res.json({
             message: 'Twitter account created!',
             payload: twitterAccount
           });
@@ -81,7 +81,7 @@ router
           });
         }
 
-        res.status(200).json({ payload: twitterAccount });
+        res.json({ payload: twitterAccount });
       });
   })
   .put((req, res) => {
@@ -97,7 +97,7 @@ router
           });
         }
 
-        res.status(200).json({
+        res.json({
           message: 'Twitter Account updated!',
           payload: twitterAccount
         });
@@ -124,7 +124,7 @@ router
             });
           }
 
-          res.status(200).json({ message: 'Twitter Account deleted!' });
+          res.json({ message: 'Twitter Account deleted!' });
         }
       );
     });

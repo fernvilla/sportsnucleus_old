@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const Tweet = require('./../models/tweet');
-const TwitterAccount = require('./../models/twitterAccount');
+const Tweet = require('./../../models/Tweet');
+const TwitterAccount = require('./../../models/TwitterAccount');
 const moment = require('moment');
 const start = moment()
   .subtract(24, 'hours')
@@ -28,7 +28,7 @@ router.route('/').get((req, res) => {
         });
       }
 
-      res.status(200).json({ payload: tweets });
+      res.json({ payload: tweets });
     });
 });
 
@@ -47,7 +47,7 @@ router.get('/last_day', (req, res) => {
         });
       }
 
-      res.status(200).json({ payload: tweets });
+      res.json({ payload: tweets });
     });
 });
 
@@ -71,7 +71,7 @@ router.route('/:tweet_id').delete((req, res) => {
           });
         }
 
-        res.status(200).json({ message: 'Tweet deleted!' });
+        res.json({ message: 'Tweet deleted!' });
       }
     );
   });

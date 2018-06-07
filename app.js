@@ -6,7 +6,15 @@ const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
 
+const leagues = require('./routes/api/leagues');
+const teams = require('./routes/api/teams');
+const twitterAccounts = require('./routes/api/twitterAccounts');
+const tweets = require('./routes/api/tweets');
+
 const app = express();
+
+// Connect to the database
+const database = require('./config/database.js');
 
 app.use(compression());
 app.use(logger('dev'));
@@ -14,23 +22,20 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-// Connect to the database
-const database = require('./config/database.js');
-
-// secure apps by setting various HTTP headers
+// Secure apps by setting various HTTP headers
 app.use(helmet());
 
-// enable CORS
+// Enable CORS
 app.use(cors());
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '/client/build')));
 
-// API endpoints
-app.use('/api/leagues', require('./routes/leagues'));
-app.use('/api/teams', require('./routes/teams'));
-app.use('/api/twitter_accounts', require('./routes/twitterAccounts'));
-app.use('/api/tweets', require('./routes/tweets'));
+// API endpoint routes
+app.use('/api/leagues', leagues);
+app.use('/api/teams', teams);
+app.use('/api/twitter_accounts', twitterAccounts);
+app.use('/api/tweets', tweets);
 
 // The "catch all" handler: for any request that doesn't
 // match one above, send back React's index.html file.

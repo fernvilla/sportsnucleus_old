@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const League = require('./../models/league');
+const League = require('./../../models/League');
 
 router
   .route('/')
@@ -17,7 +17,7 @@ router
           });
         }
 
-        res.status(200).json({ payload: leagues });
+        res.json({ payload: leagues });
       });
   })
   .post((req, res) => {
@@ -40,7 +40,7 @@ router
         });
       }
 
-      res.status(200).json({
+      res.json({
         message: 'League created!',
         payload: league
       });
@@ -60,7 +60,7 @@ router
           });
         }
 
-        res.status(200).json({ payload: league });
+        res.json({ payload: league });
       });
   })
   .put((req, res) => {
@@ -72,7 +72,7 @@ router
         });
       }
 
-      res.status(200).json({
+      res.json({
         message: 'League updated!',
         payload: league
       });
@@ -86,7 +86,7 @@ router
           message: 'There was an error deleting league.'
         });
 
-      res.status(200).json({ message: 'League deleted!' });
+      res.json({ message: 'League deleted!' });
     });
   });
 

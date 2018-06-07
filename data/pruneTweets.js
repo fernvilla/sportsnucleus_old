@@ -7,8 +7,8 @@ const today = moment()
 const twoWeeks = moment(today)
   .subtract(2, 'weeks')
   .toDate();
-const Tweet = require('./../models/tweet');
-const TwitterAccount = require('./../models/twitterAccount');
+const Tweet = require('./../models/Tweet');
+const TwitterAccount = require('./../models/TwitterAccount');
 
 mongoose.connection.on('connected', () => getTweets());
 

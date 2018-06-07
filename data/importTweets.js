@@ -1,7 +1,7 @@
 require('dotenv').config();
 
-const TwitterAccount = require('./../models/twitterAccount');
-const Tweet = require('./../models/tweet');
+const TwitterAccount = require('./../models/TwitterAccount');
+const Tweet = require('./../models/Tweet');
 const Twit = require('twit');
 const database = require('./../config/database.js');
 const mongoose = require('mongoose');

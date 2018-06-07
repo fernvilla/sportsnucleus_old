@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const Team = require('./../models/team');
-const League = require('./../models/league');
+const Team = require('./../../models/Team');
+const League = require('./../../models/League');
 
 router
   .route('/')
@@ -17,7 +17,7 @@ router
           });
         }
 
-        res.status(200).json({ payload: teams });
+        res.json({ payload: teams });
       });
   })
   .post((req, res) => {
@@ -62,7 +62,7 @@ router
             });
           }
 
-          res.status(200).json({
+          res.json({
             message: 'Team created!',
             payload: team
           });
@@ -84,7 +84,7 @@ router
           });
         }
 
-        res.status(200).json({ payload: team });
+        res.json({ payload: team });
       });
   })
   .put((req, res) => {
@@ -96,7 +96,7 @@ router
         });
       }
 
-      res.status(200).json({
+      res.json({
         message: 'Team updated!',
         payload: team
       });
@@ -119,7 +119,7 @@ router
           });
         }
 
-        res.status(200).json({ message: 'Team deleted!' });
+        res.json({ message: 'Team deleted!' });
       });
     });
   });

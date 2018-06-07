@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const db = mongoose.connection;
-const League = require('./../models/league');
-const Team = require('./../models/team');
-const TwitterAccount = require('./../models/twitterAccount');
+const League = require('./../models/League');
+const Team = require('./../models/Team');
+const TwitterAccount = require('./../models/TwitterAccount');
 
 mongoose.connect('mongodb://localhost/sportsnucleus');
 
