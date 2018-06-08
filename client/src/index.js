@@ -1,23 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { App as SiteApp, NoMatch } from './site/components';
-import { App as AdminApp } from './admin/components';
+import App from './App';
+import registerServiceWorker from './registerServiceWorker';
 
 import 'semantic-ui-css/semantic.min.css';
+//Split out css into components
+import './stylesheets/site.css';
+import './stylesheets/admin.css';
 
-if (process.env.NODE_ENV !== 'production') {
-  const { whyDidYouUpdate } = require('why-did-you-update');
-  whyDidYouUpdate(React);
-}
+ReactDOM.render(<App />, document.getElementById('root'));
 
-ReactDOM.render(
-  <BrowserRouter>
-    <Switch>
-      <Route path="/admin" component={AdminApp} />
-      <Route path="/" component={SiteApp} />
-      <Route component={NoMatch} />
-    </Switch>
-  </BrowserRouter>,
-  document.getElementById('root')
-);
+registerServiceWorker();

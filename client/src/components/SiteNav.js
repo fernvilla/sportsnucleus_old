@@ -2,12 +2,12 @@ import React from 'react';
 import { Container, Menu, Dropdown, Segment } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 
-const Nav = ({ leagues }) => {
+const SiteNav = ({ leagues }) => {
   return (
     <Segment basic>
       <Menu borderless fluid inverted fixed="top" color="black" size="large">
         <Container>
-          <NavLink to="/" activeClassName="active">
+          <NavLink to="/">
             <Menu.Item name="home" />
           </NavLink>
 
@@ -37,10 +37,20 @@ const Nav = ({ leagues }) => {
               })}
             </Dropdown.Menu>
           </Dropdown>
+
+          <Menu.Menu position="right">
+            <NavLink to="/login">
+              <Menu.Item name="login" />
+            </NavLink>
+
+            <NavLink to="signup">
+              <Menu.Item name="signup" />
+            </NavLink>
+          </Menu.Menu>
         </Container>
       </Menu>
     </Segment>
   );
 };
 
-export default Nav;
+export default SiteNav;

@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, Menu, Segment } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 
-const Nav = () => {
+const AdminNav = () => {
   return (
     <Segment basic>
       <Menu borderless fluid inverted fixed="top" color="black" size="large">
@@ -20,4 +20,4 @@ const Nav = () => {
   );
 };
 
-export default Nav;
+export default AdminNav;

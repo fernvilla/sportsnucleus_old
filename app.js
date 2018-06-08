@@ -15,6 +15,7 @@ const teams = require('./routes/api/teams');
 const twitterAccounts = require('./routes/api/twitterAccounts');
 const tweets = require('./routes/api/tweets');
 const users = require('./routes/api/users');
+const profile = require('./routes/api/profile');
 
 const app = express();
 
@@ -45,6 +46,7 @@ app.use('/api/teams', teams);
 app.use('/api/twitter_accounts', twitterAccounts);
 app.use('/api/tweets', tweets);
 app.use('/api/users', users);
+app.use('/api/profile', profile);
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '/client/build')));

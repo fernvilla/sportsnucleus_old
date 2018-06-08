@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Container, Header, Button, Segment } from 'semantic-ui-react';
-import { Feed } from './';
+import { Feed } from './../../components';
 
 const Home = () => {
   return (

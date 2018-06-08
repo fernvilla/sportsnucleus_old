@@ -1,21 +1,21 @@
 import React, { Fragment } from 'react';
 import { Route } from 'react-router-dom';
-import { Dashboard, Leagues, Nav } from '.';
+import { Dashboard, Leagues, AdminNav } from './../../components';
 
-import './../stylesheets/admin.css';
+import './../../stylesheets/admin.css';
 
-const App = props => {
+const Admin = props => {
   const {
     match: { path }
   } = props;
 
   return (
     <Fragment>
-      <Nav />
+      <AdminNav />
       <Route exact path={path} component={Dashboard} />
       <Route exact path={`${path}/leagues`} component={Leagues} />
     </Fragment>
   );
 };
 
-export default App;
+export default Admin;

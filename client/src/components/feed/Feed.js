@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Card, Loader, Container } from 'semantic-ui-react';
 import Masonry from 'react-masonry-component';
-import { Tweet } from '.';
-// import InfiniteScroll from 'react-infinite-scroller';
-import momentCustom from './../utils/momentCustom';
+import { Tweet } from './../../components';
+import momentCustom from './../../utils/momentCustom';
 
 momentCustom();
 
