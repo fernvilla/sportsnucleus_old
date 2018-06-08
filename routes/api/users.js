@@ -5,11 +5,22 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 
+const validateRegisterInput = require('./../../validation/register');
+const validateLoginInput = require('./../../validation/login');
+
 router.post('/register', (req, res) => {
+  const { errors, isValid } = validateRegisterInput(req.body);
+
+  if (!isValid) {
+    return res.status(400).json({ errors });
+  }
+
   User.findOne({ email: req.body.email })
     .then(user => {
       if (user) {
-        return res.status(400).json({ message: 'Email already exists' });
+        errors.email = 'Email already exists';
+
+        return res.status(400).json({ errors });
       }
 
       const {
@@ -49,13 +60,21 @@ router.post('/register', (req, res) => {
 });
 
 router.post('/login', (req, res) => {
+  const { errors, isValid } = validateLoginInput(req.body);
+
+  if (!isValid) {
+    return res.status(400).json({ errors });
+  }
+
   const email = req.body.email.toLowerCase();
   const password = req.body.password;
 
   User.findOne({ email })
     .then(user => {
       if (!user) {
-        return res.status(400).json({ message: 'User not found' });
+        errors.email = 'User not found';
+
+        return res.status(400).json({ errors });
       }
 
       bcrypt.compare(password, user.password).then(isMatch => {
@@ -71,7 +90,9 @@ router.post('/login', (req, res) => {
             res.json({ payload: `Bearer ${token}` });
           });
         } else {
-          return res.status(400).json({ message: 'Password incorrect' });
+          errors.password = 'Password incorrect';
+
+          return res.status(400).json({ errors });
         }
       });
     })
