@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
-import { Admin, Home, SiteNav, Login, Signup } from './components';
 import axios from 'axios';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import store from './store';
+
+import { Admin, Home, SiteNav, Login, Register } from './components';
 
 const PrivateRoute = ({ component: Component, authorized, ...rest }) => {
   return (
@@ -40,16 +43,18 @@ export default class componentName extends Component {
     const { leagues } = this.state;
 
     return (
-      <Router>
-        <div>
-          <SiteNav leagues={leagues} />
+      <Provider store={store}>
+        <Router>
+          <div>
+            <SiteNav leagues={leagues} />
 
-          <Route exact path={'/login'} component={Login} />
-          <Route exact path={'/signup'} component={Signup} />
-          <PrivateRoute authorized={false} exact path="/admin" component={Admin} />
-          <Route exact path="/" component={Home} />
-        </div>
-      </Router>
+            <Route exact path={'/login'} component={Login} />
+            <Route exact path={'/signup'} component={Register} />
+            <PrivateRoute authorized={false} exact path="/admin" component={Admin} />
+            <Route exact path="/" component={Home} />
+          </div>
+        </Router>
+      </Provider>
     );
   }
 }

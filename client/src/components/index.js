@@ -5,7 +5,7 @@ export { default as Feed } from './feed/Feed';
 
 export { default as Home } from './home/Home';
 
-export { default as Signup } from './auth/Signup';
+export { default as Register } from './auth/Register';
 export { default as Login } from './auth/Login';
 
 export { default as Admin } from './admin/Admin';

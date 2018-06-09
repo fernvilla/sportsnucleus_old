@@ -12,7 +12,7 @@ router.post('/register', (req, res) => {
   const { errors, isValid } = validateRegisterInput(req.body);
 
   if (!isValid) {
-    return res.status(400).json({ errors });
+    return res.status(400).json(errors);
   }
 
   User.findOne({ email: req.body.email })
@@ -20,7 +20,7 @@ router.post('/register', (req, res) => {
       if (user) {
         errors.email = 'Email already exists';
 
-        return res.status(400).json({ errors });
+        return res.status(400).json(errors);
       }
 
       const {
@@ -63,7 +63,7 @@ router.post('/login', (req, res) => {
   const { errors, isValid } = validateLoginInput(req.body);
 
   if (!isValid) {
-    return res.status(400).json({ errors });
+    return res.status(400).json(errors);
   }
 
   const email = req.body.email.toLowerCase();
@@ -92,7 +92,7 @@ router.post('/login', (req, res) => {
         } else {
           errors.password = 'Password incorrect';
 
-          return res.status(400).json({ errors });
+          return res.status(400).json(errors);
         }
       });
     })
