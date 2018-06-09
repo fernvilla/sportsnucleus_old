@@ -24,12 +24,12 @@ router.post('/register', (req, res) => {
       }
 
       const {
-        body: { name, email, password }
+        body: { email, password }
       } = req;
 
       const newUser = new User({
         email: email.toLowerCase(),
-        name,
+
         password
       });
 
@@ -79,8 +79,8 @@ router.post('/login', (req, res) => {
 
       bcrypt.compare(password, user.password).then(isMatch => {
         if (isMatch) {
-          const { id, name, isAdmin } = user;
-          const payload = { id, name, isAdmin };
+          const { id, isAdmin } = user;
+          const payload = { id, isAdmin };
 
           jwt.sign(payload, process.env.SECRET_OR_KEY, { expiresIn: 3600 }, (err, token) => {
             if (err) {
@@ -105,9 +105,9 @@ router.post('/login', (req, res) => {
 });
 
 router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
-  const { id, email, name, isAdmin, date } = req.user;
+  const { id, email, isAdmin, date } = req.user;
   res.json({
-    payload: { id, email, name, isAdmin, date }
+    payload: { id, email, isAdmin, date }
   });
 });
 

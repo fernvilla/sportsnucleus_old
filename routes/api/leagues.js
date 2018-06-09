@@ -17,7 +17,7 @@ router
           });
         }
 
-        res.json({ payload: leagues });
+        res.json(leagues);
       });
   })
   .post((req, res) => {
@@ -60,7 +60,7 @@ router
           });
         }
 
-        res.json({ payload: league });
+        res.json(league);
       });
   })
   .put((req, res) => {

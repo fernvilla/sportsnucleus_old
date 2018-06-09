@@ -21,8 +21,7 @@ const PrivateRoute = ({ component: Component, authorized, ...rest }) => {
 
 export default class componentName extends Component {
   state = {
-    leagues: [],
-    leaguesFetched: false
+    leagues: []
   };
 
   componentDidMount() {
@@ -32,18 +31,14 @@ export default class componentName extends Component {
   fetchleagues() {
     axios
       .get(`/api/leagues`)
-      .then(({ data: { payload } }) => {
-        this.setState({ leagues: payload, leaguesFetched: true });
+      .then(({ data }) => {
+        this.setState({ leagues: data });
       })
       .catch(err => console.error(err));
   }
 
   render() {
-    const { leaguesFetched, leagues } = this.state;
-
-    if (!leaguesFetched) {
-      return <Loader active inline="centered" size="large" />;
-    }
+    const { leagues } = this.state;
 
     return (
       <BrowserRouter>
