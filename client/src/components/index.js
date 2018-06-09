@@ -1,5 +1,4 @@
-export { default as SiteNav } from './SiteNav';
-export { default as NoMatch } from './NoMatch';
+export { default as SiteNav } from './layout/SiteNav';
 
 export { default as Tweet } from './feed/Tweet';
 export { default as Feed } from './feed/Feed';

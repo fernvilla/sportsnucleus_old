@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 import { Grid, Form, Segment, Button, Header, Message } from 'semantic-ui-react';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import './../../stylesheets/login.css';
 
 export default class Login extends Component {
   state = {
     email: '',
-    password: ''
+    password: '',
+    errors: {}
   };
 
-  handleInputChange = e => {
+  onChange = e => {
     const {
       target: { value, name }
     } = e;
@@ -18,11 +19,13 @@ export default class Login extends Component {
     this.setState({ [name]: value });
   };
 
-  submitHandler = e => {
+  onSubmit = e => {
     e.preventDefault();
 
     const { email, password } = this.state;
-    console.log(email, password);
+    const user = { email, password };
+
+    console.log(user);
   };
 
   render() {
@@ -34,10 +37,10 @@ export default class Login extends Component {
         <Grid verticalAlign="middle" textAlign="center">
           <Grid.Column computer={5} tablet={10} mobile={16}>
             <Header as="h2" textAlign="center">
-              Log in to Your Account
+              Log Into Your Account
             </Header>
 
-            <Form onSubmit={this.submitHandler}>
+            <Form onSubmit={this.onSubmit}>
               <Segment stacked padded>
                 <Form.Input
                   fluid
@@ -45,7 +48,8 @@ export default class Login extends Component {
                   iconPosition="left"
                   placeholder="E-mail address"
                   name="email"
-                  onChange={this.handleInputChange}
+                  onChange={this.onChange}
+                  value={email}
                 />
 
                 <Form.Input
@@ -55,17 +59,18 @@ export default class Login extends Component {
                   placeholder="Password"
                   type="password"
                   name="password"
-                  onChange={this.handleInputChange}
+                  onChange={this.onChange}
+                  value={password}
                 />
 
                 <Button color="blue" fluid size="large" disabled={disabled}>
-                  Log in
+                  Login
                 </Button>
               </Segment>
             </Form>
 
             <Message>
-              New to us? <NavLink to="signup">Sign Up</NavLink>
+              New to us? <Link to="signup">Sign Up</Link>
             </Message>
           </Grid.Column>
         </Grid>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, Form, Segment, Button, Header, Message } from 'semantic-ui-react';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import './../../stylesheets/login.css';
 
@@ -8,10 +8,11 @@ export default class Signup extends Component {
   state = {
     email: '',
     password: '',
-    passwordConfirm: ''
+    passwordConfirm: '',
+    errors: {}
   };
 
-  handleInputChange = e => {
+  onChange = e => {
     const {
       target: { value, name }
     } = e;
@@ -19,11 +20,13 @@ export default class Signup extends Component {
     this.setState({ [name]: value });
   };
 
-  submitHandler = e => {
+  onSubmit = e => {
     e.preventDefault();
 
     const { email, password, passwordConfirm } = this.state;
-    console.log(email, password, passwordConfirm);
+    const newUser = { email, password, passwordConfirm };
+
+    console.log(newUser);
   };
 
   render() {
@@ -38,7 +41,7 @@ export default class Signup extends Component {
               Create an Account
             </Header>
 
-            <Form onSubmit={this.submitHandler}>
+            <Form onSubmit={this.onSubmit}>
               <Segment stacked padded>
                 <Form.Input
                   fluid
@@ -46,7 +49,8 @@ export default class Signup extends Component {
                   iconPosition="left"
                   placeholder="E-mail address"
                   name="email"
-                  onChange={this.handleInputChange}
+                  onChange={this.onChange}
+                  value={email}
                 />
 
                 <Form.Input
@@ -57,7 +61,8 @@ export default class Signup extends Component {
                   type="password"
                   name="password"
                   autoComplete="nope"
-                  onChange={this.handleInputChange}
+                  onChange={this.onChange}
+                  value={password}
                 />
 
                 <Form.Input
@@ -68,17 +73,18 @@ export default class Signup extends Component {
                   type="password"
                   name="passwordConfirm"
                   autoComplete="nope"
-                  onChange={this.handleInputChange}
+                  onChange={this.onChange}
+                  value={passwordConfirm}
                 />
 
                 <Button color="blue" fluid size="large" disabled={disabled}>
-                  Signup
+                  Sign Up
                 </Button>
               </Segment>
             </Form>
 
             <Message>
-              Already have an account? <NavLink to="login">Login</NavLink>
+              Already have an account? <Link to="login">Login</Link>
             </Message>
           </Grid.Column>
         </Grid>

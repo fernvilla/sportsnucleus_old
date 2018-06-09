@@ -1,15 +1,15 @@
 import React from 'react';
 import { Container, Menu, Dropdown, Segment } from 'semantic-ui-react';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const SiteNav = ({ leagues }) => {
   return (
     <Segment basic>
       <Menu borderless fluid inverted fixed="top" color="black" size="large">
         <Container>
-          <NavLink to="/">
+          <Link to="/">
             <Menu.Item name="home" />
-          </NavLink>
+          </Link>
 
           <Dropdown item simple text="Team Feeds">
             <Dropdown.Menu>
@@ -17,17 +17,17 @@ const SiteNav = ({ leagues }) => {
                 return (
                   <Dropdown.Item key={league._id}>
                     <i className="dropdown icon" />
-                    <NavLink to={`/leagues/${league.slug}`} className="nav-link">
+                    <Link to={`/leagues/${league.slug}`} className="nav-link">
                       {league.shortName}
-                    </NavLink>
+                    </Link>
 
                     <Dropdown.Menu>
                       {league.teams.map(team => {
                         return (
                           <Dropdown.Item key={team._id}>
-                            <NavLink to={`/teams/${team.slug}`} className="nav-link">
+                            <Link to={`/teams/${team.slug}`} className="nav-link">
                               {team.name}
-                            </NavLink>
+                            </Link>
                           </Dropdown.Item>
                         );
                       })}
@@ -39,13 +39,13 @@ const SiteNav = ({ leagues }) => {
           </Dropdown>
 
           <Menu.Menu position="right">
-            <NavLink to="/login">
+            <Link to="/login">
               <Menu.Item name="login" />
-            </NavLink>
+            </Link>
 
-            <NavLink to="signup">
+            <Link to="signup">
               <Menu.Item name="signup" />
-            </NavLink>
+            </Link>
           </Menu.Menu>
         </Container>
       </Menu>

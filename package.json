@@ -9,7 +9,6 @@
     "client": "cd client && yarn start",
     "dev": "npm-run-all -p server client",
     "heroku-postbuild": "cd client && yarn --production=false && yarn run build",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "seed": "node ./data/seed",
     "import:tweets": "node ./data/importTweets",
     "prune:tweets": "node ./data/pruneTweets"

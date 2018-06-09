@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
-import { Admin, NoMatch, Home, SiteNav, Login, Signup } from './components';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import { Admin, Home, SiteNav, Login, Signup } from './components';
 import axios from 'axios';
-import { Loader } from 'semantic-ui-react';
 
 const PrivateRoute = ({ component: Component, authorized, ...rest }) => {
   return (
@@ -41,19 +40,16 @@ export default class componentName extends Component {
     const { leagues } = this.state;
 
     return (
-      <BrowserRouter>
+      <Router>
         <div>
           <SiteNav leagues={leagues} />
 
-          <Switch>
-            <Route exact path={'/login'} component={Login} />
-            <Route exact path={'/signup'} component={Signup} />
-            <PrivateRoute authorized={false} path="/admin" component={Admin} />
-            <Route path="/" component={Home} />
-            <Route component={NoMatch} />
-          </Switch>
+          <Route exact path={'/login'} component={Login} />
+          <Route exact path={'/signup'} component={Signup} />
+          <PrivateRoute authorized={false} exact path="/admin" component={Admin} />
+          <Route exact path="/" component={Home} />
         </div>
-      </BrowserRouter>
+      </Router>
     );
   }
 }
