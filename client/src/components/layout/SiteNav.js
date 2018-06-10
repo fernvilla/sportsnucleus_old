@@ -1,56 +1,102 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Container, Menu, Dropdown, Segment } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { logoutUser } from './../../actions/authActions';
 
-const SiteNav = ({ leagues }) => {
-  return (
-    <Segment basic>
-      <Menu borderless fluid inverted fixed="top" color="black" size="large">
-        <Container>
-          <Link to="/">
-            <Menu.Item name="home" />
-          </Link>
+class SiteNav extends Component {
+  static propTypes = {
+    auth: PropTypes.object.isRequired,
+    logoutUser: PropTypes.func.isRequired
+  };
 
-          <Dropdown item simple text="Team Feeds">
-            <Dropdown.Menu>
-              {leagues.map(league => {
-                return (
-                  <Dropdown.Item key={league._id}>
-                    <i className="dropdown icon" />
-                    <Link to={`/leagues/${league.slug}`} className="nav-link">
-                      {league.shortName}
-                    </Link>
+  onLogoutClick = e => {
+    e.preventDefault();
 
-                    <Dropdown.Menu>
-                      {league.teams.map(team => {
-                        return (
-                          <Dropdown.Item key={team._id}>
-                            <Link to={`/teams/${team.slug}`} className="nav-link">
-                              {team.name}
-                            </Link>
-                          </Dropdown.Item>
-                        );
-                      })}
-                    </Dropdown.Menu>
-                  </Dropdown.Item>
-                );
-              })}
-            </Dropdown.Menu>
-          </Dropdown>
+    this.props.logoutUser();
+  };
 
-          <Menu.Menu position="right">
-            <Link to="/login">
-              <Menu.Item name="login" />
+  render() {
+    const {
+      leagues,
+      auth: { isAuthenticated }
+    } = this.props;
+
+    const authLinks = (
+      <Menu.Menu position="right">
+        <Link to="/profile">
+          <Menu.Item name="profile" />
+        </Link>
+
+        <Menu.Item name="logout" link onClick={this.onLogoutClick} />
+      </Menu.Menu>
+    );
+
+    const guestLinks = (
+      <Menu.Menu position="right">
+        <Link to="/login">
+          <Menu.Item name="login" />
+        </Link>
+
+        <Link to="signup">
+          <Menu.Item name="signup" />
+        </Link>
+      </Menu.Menu>
+    );
+
+    return (
+      <Segment basic>
+        <Menu borderless fluid inverted fixed="top" color="black" size="large">
+          <Container>
+            <Link to="/">
+              <Menu.Item name="home" />
             </Link>
 
-            <Link to="signup">
-              <Menu.Item name="signup" />
-            </Link>
-          </Menu.Menu>
-        </Container>
-      </Menu>
-    </Segment>
-  );
-};
+            <Dropdown item simple text="Team Feeds">
+              <Dropdown.Menu>
+                {leagues.map(league => {
+                  return (
+                    <Dropdown.Item key={league._id}>
+                      <i className="dropdown icon" />
+                      <Link to={`/leagues/${league.slug}`} className="nav-link">
+                        {league.shortName}
+                      </Link>
 
-export default SiteNav;
+                      <Dropdown.Menu>
+                        {league.teams.map(team => {
+                          return (
+                            <Dropdown.Item key={team._id}>
+                              <Link to={`/teams/${team.slug}`} className="nav-link">
+                                {team.name}
+                              </Link>
+                            </Dropdown.Item>
+                          );
+                        })}
+                      </Dropdown.Menu>
+                    </Dropdown.Item>
+                  );
+                })}
+              </Dropdown.Menu>
+            </Dropdown>
+
+            {isAuthenticated ? authLinks : guestLinks}
+          </Container>
+        </Menu>
+      </Segment>
+    );
+  }
+}
+
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+const mapDispatchToProps = dispatch => ({
+  logoutUser: () => dispatch(logoutUser())
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SiteNav);

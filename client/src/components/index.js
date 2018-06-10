@@ -12,3 +12,6 @@ export { default as Admin } from './admin/Admin';
 export { default as Dashboard } from './admin/Dashboard';
 export { default as Leagues } from './admin/Leagues';
 export { default as AdminNav } from './admin/AdminNav';
+
+export { default as PrivateRoute } from './common/PrivateRoute';
+export { default as AdminRoute } from './common/AdminRoute';

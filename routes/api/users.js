@@ -74,20 +74,20 @@ router.post('/login', (req, res) => {
       if (!user) {
         errors.email = 'User not found';
 
-        return res.status(404).json({ errors });
+        return res.status(404).json(errors);
       }
 
       bcrypt.compare(password, user.password).then(isMatch => {
         if (isMatch) {
-          const { id, isAdmin } = user;
-          const payload = { id, isAdmin };
+          const { id, isAdmin, email } = user;
+          const payload = { id, isAdmin, email };
 
           jwt.sign(payload, process.env.SECRET_OR_KEY, { expiresIn: 3600 }, (err, token) => {
             if (err) {
               return res.status(500).json({ error: err, message: 'Login failed' });
             }
 
-            res.json({ payload: `Bearer ${token}` });
+            res.json({ token: `Bearer ${token}` });
           });
         } else {
           errors.password = 'Password incorrect';

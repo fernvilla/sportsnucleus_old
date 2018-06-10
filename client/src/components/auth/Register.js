@@ -22,11 +22,22 @@ class Register extends Component {
     errors: PropTypes.object.isRequired
   };
 
+  componentDidMount() {
+    const {
+      history,
+      auth: { isAuthenticated }
+    } = this.props;
+
+    if (isAuthenticated) {
+      history.push('/profile');
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     const { errors } = nextProps;
 
     if (errors !== this.props.errors) {
-      this.setState({ errors: errors });
+      this.setState({ errors });
     }
   }
 
@@ -42,10 +53,10 @@ class Register extends Component {
     e.preventDefault();
 
     const { email, password, passwordConfirm } = this.state;
-    const { registerUser } = this.props;
+    const { registerUser, history } = this.props;
     const newUser = { email, password, passwordConfirm };
 
-    registerUser(newUser, this.props.history);
+    registerUser(newUser, history);
   };
 
   render() {
@@ -66,7 +77,7 @@ class Register extends Component {
                     fluid
                     icon="user"
                     iconPosition="left"
-                    placeholder="E-mail address"
+                    placeholder="Email address"
                     name="email"
                     onChange={this.onChange}
                     value={email}

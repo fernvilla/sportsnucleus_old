@@ -1,27 +1,32 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import jwt_decode from 'jwt-decode';
+import setAuthToken from './utils/setAuthToken';
+import { setCurrentUser, logoutUser } from './actions/authActions';
 import store from './store';
 
-import { Admin, Home, SiteNav, Login, Register } from './components';
+import { Admin, Home, SiteNav, Login, Register, PrivateRoute } from './components';
 
-const PrivateRoute = ({ component: Component, authorized, ...rest }) => {
-  return (
-    <Route
-      {...rest}
-      render={props =>
-        authorized === true ? (
-          <Component {...props} />
-        ) : (
-          <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
-        )
-      }
-    />
-  );
-};
+const { jwtToken } = localStorage;
 
-export default class componentName extends Component {
+if (jwtToken) {
+  setAuthToken(jwtToken);
+
+  const decoded = jwt_decode(jwtToken);
+  store.dispatch(setCurrentUser(decoded));
+
+  const currentTime = Date.now() / 1000;
+
+  if (decoded.exp < currentTime) {
+    store.dispatch(logoutUser);
+    //TODO: clear current profile
+    window.location.href = '/login';
+  }
+}
+
+class App extends Component {
   state = {
     leagues: []
   };
@@ -50,7 +55,9 @@ export default class componentName extends Component {
 
             <Route exact path={'/login'} component={Login} />
             <Route exact path={'/signup'} component={Register} />
-            <PrivateRoute authorized={false} exact path="/admin" component={Admin} />
+            <Switch>
+              <PrivateRoute exact path="/admin" component={Admin} />
+            </Switch>
             <Route exact path="/" component={Home} />
           </div>
         </Router>
@@ -58,3 +65,5 @@ export default class componentName extends Component {
     );
   }
 }
+
+export default App;

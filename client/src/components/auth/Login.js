@@ -1,15 +1,50 @@
 import React, { Component } from 'react';
-import { Grid, Form, Segment, Button, Header, Message } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Grid, Form, Segment, Button, Header, Message, Label, Input } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import { loginUser } from './../../actions/authActions';
 
 import './../../stylesheets/login.css';
 
-export default class Login extends Component {
+class Login extends Component {
   state = {
     email: '',
     password: '',
     errors: {}
   };
+
+  static propTypes = {
+    loginUser: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired
+  };
+
+  componentDidMount() {
+    const {
+      history,
+      auth: { isAuthenticated }
+    } = this.props;
+
+    if (isAuthenticated) {
+      history.push('/profile');
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const {
+      errors,
+      auth: { isAuthenticated }
+    } = nextProps;
+
+    if (isAuthenticated !== this.props.auth.isAuthenticated) {
+      this.props.history.push('/');
+    }
+
+    if (errors !== this.props.errors) {
+      this.setState({ errors });
+    }
+  }
 
   onChange = e => {
     const {
@@ -23,14 +58,14 @@ export default class Login extends Component {
     e.preventDefault();
 
     const { email, password } = this.state;
+    const { loginUser } = this.props;
     const user = { email, password };
 
-    console.log(user);
+    loginUser(user);
   };
 
   render() {
-    const { email, password } = this.state;
-    const disabled = !email.length || !password.length;
+    const { email, password, errors } = this.state;
 
     return (
       <Segment basic className="login-form">
@@ -42,28 +77,46 @@ export default class Login extends Component {
 
             <Form onSubmit={this.onSubmit}>
               <Segment stacked padded>
-                <Form.Input
-                  fluid
-                  icon="user"
-                  iconPosition="left"
-                  placeholder="E-mail address"
-                  name="email"
-                  onChange={this.onChange}
-                  value={email}
-                />
+                <Form.Field>
+                  <Input
+                    fluid
+                    icon="user"
+                    iconPosition="left"
+                    placeholder="Email address"
+                    name="email"
+                    onChange={this.onChange}
+                    value={email}
+                  />
 
-                <Form.Input
-                  fluid
-                  icon="lock"
-                  iconPosition="left"
-                  placeholder="Password"
-                  type="password"
-                  name="password"
-                  onChange={this.onChange}
-                  value={password}
-                />
+                  {errors.email &&
+                    !!errors.email.length && (
+                      <Label basic color="red" pointing>
+                        {errors.email}
+                      </Label>
+                    )}
+                </Form.Field>
 
-                <Button color="blue" fluid size="large" disabled={disabled}>
+                <Form.Field>
+                  <Input
+                    fluid
+                    icon="lock"
+                    iconPosition="left"
+                    placeholder="Password"
+                    type="password"
+                    name="password"
+                    onChange={this.onChange}
+                    value={password}
+                  />
+
+                  {errors.password &&
+                    !!errors.password.length && (
+                      <Label basic color="red" pointing>
+                        {errors.password}
+                      </Label>
+                    )}
+                </Form.Field>
+
+                <Button color="blue" fluid size="large">
                   Login
                 </Button>
               </Segment>
@@ -78,3 +131,17 @@ export default class Login extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
+
+const mapDispatchToProps = dispatch => ({
+  loginUser: userData => dispatch(loginUser(userData))
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Login);
