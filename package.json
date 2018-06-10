@@ -4,8 +4,8 @@
   "private": true,
   "main": "server.js",
   "scripts": {
-    "start": "node ./bin/www",
-    "server": "nodemon ./bin/www",
+    "start": "node server.js",
+    "server": "nodemon server.js",
     "client": "cd client && yarn start",
     "dev": "npm-run-all -p server client",
     "heroku-postbuild": "cd client && yarn --production=false && yarn run build",
