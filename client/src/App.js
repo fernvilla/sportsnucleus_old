@@ -7,7 +7,7 @@ import setAuthToken from './utils/setAuthToken';
 import { setCurrentUser, logoutUser } from './actions/authActions';
 import store from './store';
 
-import { Admin, Home, SiteNav, Login, Register, PrivateRoute } from './components';
+import { Admin, Home, SiteNav, Login, Register, AdminRoute } from './components';
 
 const { jwtToken } = localStorage;
 
@@ -15,6 +15,7 @@ if (jwtToken) {
   setAuthToken(jwtToken);
 
   const decoded = jwt_decode(jwtToken);
+
   store.dispatch(setCurrentUser(decoded));
 
   const currentTime = Date.now() / 1000;
@@ -56,7 +57,7 @@ class App extends Component {
             <Route exact path={'/login'} component={Login} />
             <Route exact path={'/signup'} component={Register} />
             <Switch>
-              <PrivateRoute exact path="/admin" component={Admin} />
+              <AdminRoute exact path="/admin" component={Admin} />
             </Switch>
             <Route exact path="/" component={Home} />
           </div>

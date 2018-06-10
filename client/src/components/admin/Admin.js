@@ -11,7 +11,6 @@ const Admin = props => {
 
   return (
     <Fragment>
-      <AdminNav />
       <Route exact path={path} component={Dashboard} />
       <Route exact path={`${path}/leagues`} component={Leagues} />
     </Fragment>
