@@ -27,7 +27,7 @@ class Login extends Component {
     } = this.props;
 
     if (isAuthenticated) {
-      history.push('/profile');
+      history.push('/');
     }
   }
 

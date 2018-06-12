@@ -72,7 +72,7 @@ const Tweet = ({ tweet }) => {
             size="mini"
             trigger={
               <a href={`https://twitter.com/intent/like?tweet_id=${tweet.tweetId}`}>
-                <Icon link fitted inverted color="black" name="empty heart" />
+                <Icon link fitted inverted color="black" name="heart outline" />
               </a>
             }
             content="Like tweet"
@@ -97,7 +97,7 @@ const Tweet = ({ tweet }) => {
                 href={`mailto:?subject=Check out this tweet &body=${
                   tweet.text
                 } ${tweetLink} via http://www.sportsnucleus.io`}>
-                <Icon link fitted inverted color="black" name="mail outline" />
+                <Icon link fitted inverted color="black" name="mail" />
               </a>
             }
             content="Share via email"

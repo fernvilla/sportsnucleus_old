@@ -3,8 +3,10 @@ require('dotenv').config();
 const TwitterAccount = require('./../models/TwitterAccount');
 const Tweet = require('./../models/Tweet');
 const Twit = require('twit');
-const database = require('./../config/database.js');
+const { uploadToS3 } = require('./../utils/s3');
 const mongoose = require('mongoose');
+
+require('./../config/database.js');
 
 const T = new Twit({
   consumer_key: process.env.TWITTER_CONSUMER_KEY,
@@ -36,19 +38,18 @@ const checkForDisconnect = () => {
 
 let processedAccounts = 0;
 let totalAccounts = 0;
+let processedTweets = 0;
+let totalTweets = 0;
+
+const checkAllTweetsProcessed = () => {
+  processedTweets++;
+
+  if (processedTweets === totalTweets) {
+    checkForDisconnect();
+  }
+};
 
 const fetchTweets = screenName => {
-  let processedTweets = 0;
-  let totalTweets = 0;
-
-  const checkAllTweetsProcessed = () => {
-    processedTweets++;
-
-    if (processedTweets === totalTweets) {
-      checkForDisconnect();
-    }
-  };
-
   T.get(
     'statuses/user_timeline',
     {
@@ -63,45 +64,71 @@ const fetchTweets = screenName => {
 
       data.map(d => {
         const media = d.entities.media;
+        const image = media ? media[0].media_url_https : null;
+
         const tweet = new Tweet({
           text: d.text,
           tweetId: d.id_str,
           published: d.created_at,
           userName: d.user.name,
-          profileImageUrl: d.user.profile_image_url,
-          imageUrl: media ? media[0].media_url_https : null
+          profileImageUrl: d.user.profile_image_url
         });
 
-        TwitterAccount.findOne({ screenName }, (err, twitterAccount) => {
-          if (err) {
-            checkAllTweetsProcessed();
-            return console.log(`find twitter account error: ${err}`);
-          }
-
-          tweet.twitterAccount = twitterAccount._id;
-
-          tweet.save((err, tweet) => {
-            if (err) {
-              checkAllTweetsProcessed();
-
-              return console.log(`tweet save error: ${err}`);
-            }
-
-            twitterAccount.tweets.push(tweet);
-
-            twitterAccount.save(err => {
-              if (err) {
-                checkAllTweetsProcessed();
-
-                return console.log(`twitterAccount save error: ${err}`);
-              }
-
-              console.log(`Tweet created: ${tweet}`);
-              checkAllTweetsProcessed();
-            });
-          });
-        });
+        addItemsToTweet(screenName, tweet, image);
       });
     }
   );
+};
+
+const addItemsToTweet = (screenName, tweet, image) => {
+  TwitterAccount.findOne({ screenName }, (err, twitterAccount) => {
+    if (err) {
+      checkAllTweetsProcessed();
+      return console.log(`find twitter account error: ${err}`);
+    }
+
+    tweet.twitterAccount = twitterAccount._id;
+
+    if (image) {
+      console.log(image);
+      const imagePath = `${tweet._id}.${image.split('.').pop()}`;
+
+      uploadToS3(image, 'tweets', imagePath)
+        .then(path => {
+          tweet.imageUrl = path;
+
+          console.log(`image saved: ${path}`);
+          saveTweet(tweet, twitterAccount);
+        })
+        .catch(err => {
+          console.log(`error saving image: ${err}`);
+          saveTweet(tweet, twitterAccount);
+        });
+    } else {
+      saveTweet(tweet, twitterAccount);
+    }
+  });
+};
+
+const saveTweet = (tweet, twitterAccount) => {
+  tweet.save((err, tweet) => {
+    if (err) {
+      checkAllTweetsProcessed();
+
+      return console.log(`tweet save error: ${err}`);
+    }
+
+    twitterAccount.tweets.push(tweet);
+
+    twitterAccount.save(err => {
+      if (err) {
+        checkAllTweetsProcessed();
+
+        return console.log(`twitterAccount save error: ${err}`);
+      }
+
+      // console.log(`Tweet created: ${tweet}`);
+      checkAllTweetsProcessed();
+    });
+  });
 };
