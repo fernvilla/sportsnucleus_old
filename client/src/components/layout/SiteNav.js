@@ -20,7 +20,10 @@ class SiteNav extends Component {
   render() {
     const {
       leagues,
-      auth: { isAuthenticated }
+      auth: {
+        isAuthenticated,
+        user: { isAdmin }
+      }
     } = this.props;
 
     const authLinks = (
@@ -28,6 +31,12 @@ class SiteNav extends Component {
         <Link to="/profile">
           <Menu.Item name="profile" />
         </Link>
+
+        {isAdmin && (
+          <Link to="/admin">
+            <Menu.Item name="admin dashboard" />
+          </Link>
+        )}
 
         <Menu.Item name="logout" link onClick={this.onLogoutClick} />
       </Menu.Menu>

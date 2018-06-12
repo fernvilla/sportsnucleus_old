@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Route } from 'react-router-dom';
-import { Dashboard, Leagues, AdminNav } from './../../components';
+import { Dashboard, Leagues } from './../../components';
 
 import './../../stylesheets/admin.css';
 
