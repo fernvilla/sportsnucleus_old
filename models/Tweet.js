@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const { uploadToS3 } = require('./../utils/s3');
+
 const Schema = mongoose.Schema;
 const TweetSchema = new Schema(
   {
@@ -37,7 +39,20 @@ TweetSchema.pre('save', function(next) {
 
   Tweet.find({ tweetId: self.tweetId }, (err, docs) => {
     if (!docs.length) {
-      next();
+      if (self.imageUrl) {
+        const imagePath = `${self.tweetId}.${self.imageUrl.split('.').pop()}`;
+
+        //Save here to prevent multiple uploads when tweet already exists
+        uploadToS3(self.imageUrl, 'tweets', imagePath)
+          .then(path => {
+            self.imageUrl = path;
+
+            next();
+          })
+          .catch(() => next());
+      } else {
+        next();
+      }
     } else {
       next(new Error('Tweet exists!'));
     }

@@ -3,7 +3,6 @@ require('dotenv').config();
 const TwitterAccount = require('./../models/TwitterAccount');
 const Tweet = require('./../models/Tweet');
 const Twit = require('twit');
-const { uploadToS3 } = require('./../utils/s3');
 const mongoose = require('mongoose');
 
 require('./../config/database.js');
@@ -71,7 +70,8 @@ const fetchTweets = screenName => {
           tweetId: d.id_str,
           published: d.created_at,
           userName: d.user.name,
-          profileImageUrl: d.user.profile_image_url
+          profileImageUrl: d.user.profile_image_url,
+          imageUrl: image
         });
 
         addItemsToTweet(screenName, tweet, image);
@@ -89,24 +89,7 @@ const addItemsToTweet = (screenName, tweet, image) => {
 
     tweet.twitterAccount = twitterAccount._id;
 
-    if (image) {
-      console.log(image);
-      const imagePath = `${tweet._id}.${image.split('.').pop()}`;
-
-      uploadToS3(image, 'tweets', imagePath)
-        .then(path => {
-          tweet.imageUrl = path;
-
-          console.log(`image saved: ${path}`);
-          saveTweet(tweet, twitterAccount);
-        })
-        .catch(err => {
-          console.log(`error saving image: ${err}`);
-          saveTweet(tweet, twitterAccount);
-        });
-    } else {
-      saveTweet(tweet, twitterAccount);
-    }
+    saveTweet(tweet, twitterAccount);
   });
 };
 
@@ -127,7 +110,6 @@ const saveTweet = (tweet, twitterAccount) => {
         return console.log(`twitterAccount save error: ${err}`);
       }
 
-      // console.log(`Tweet created: ${tweet}`);
       checkAllTweetsProcessed();
     });
   });

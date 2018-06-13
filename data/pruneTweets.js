@@ -1,14 +1,15 @@
 const database = require('./../config/database');
 const mongoose = require('mongoose');
 const moment = require('moment');
-const today = moment()
+const startDate = moment()
   .startOf('day')
   .toDate();
-const twoWeeks = moment(today)
-  .subtract(2, 'weeks')
+const endDat = moment(startDate)
+  .subtract(1, 'weeks')
   .toDate();
 const Tweet = require('./../models/Tweet');
 const TwitterAccount = require('./../models/TwitterAccount');
+const { deleteFromS3 } = require('./../utils/s3');
 
 mongoose.connection.on('connected', () => getTweets());
 
@@ -21,7 +22,7 @@ const getTweets = () => {
   Tweet.find({})
     .populate('team')
     .where('published')
-    .lt(twoWeeks)
+    .lt(endDat)
     .exec((err, tweets) => {
       if (err) return console.log(`Error fetching tweets: ${err}`);
       if (!tweets.length) return disconnectDb();
@@ -36,6 +37,8 @@ const deleteTweets = tweets => {
     Tweet.findByIdAndRemove(tweet._id, (err, tweet) => {
       if (err) return checkForDisconnect();
 
+      if (tweet.imageUrl) deleteFromS3(tweet.imageUrl);
+
       //Pull tweet from twitter account
       TwitterAccount.findByIdAndUpdate(
         tweet.twitterAccount._id,
@@ -43,7 +46,6 @@ const deleteTweets = tweets => {
         err => {
           if (err) return checkForDisconnect();
 
-          console.log(`Tweet deleted: ${tweet._id}`);
           checkForDisconnect();
         }
       );
@@ -53,8 +55,6 @@ const deleteTweets = tweets => {
 
 const checkForDisconnect = () => {
   deleteCount++;
-
-  console.log(deleteCount, totalTweets);
 
   if (deleteCount === totalTweets) {
     disconnectDb();

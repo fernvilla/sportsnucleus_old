@@ -6,6 +6,7 @@ const isDebug = process.env.NODE_ENV !== 'production';
 const albumBucketName = isDebug ? 'sportsnucleus-test' : 'sportsnucleus';
 const bucketRegion = 'us-west-2';
 const cdnPath = `https://s3-us-west-2.amazonaws.com/${albumBucketName}`;
+const { sendErrorEmail } = require('./../utils/email');
 
 aws.config.update({
   accessKeyId: process.env.AWS_KEY,
@@ -67,7 +68,7 @@ const deleteFromS3 = imgPath => {
             err
           )} ${JSON.stringify(err.stack)}}`;
 
-          return console.log(errorText);
+          return sendErrorEmail(errorText);
         }
 
         return reject(err);
@@ -77,17 +78,5 @@ const deleteFromS3 = imgPath => {
     });
   });
 };
-
-// const deleteS3Bucket = () => {
-//   const params = { Bucket: albumBucketName };
-
-//   s3.deleteBucket(params, (err, data) => {
-//     if (err) {
-//       console.log(err, err.stack);
-//     } else {
-//       console.log(data);
-//     }
-//   });
-// };
 
 module.exports = { deleteFromS3, uploadToS3 };

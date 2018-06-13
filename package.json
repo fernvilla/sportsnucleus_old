@@ -14,6 +14,7 @@
     "prune:tweets": "node ./data/pruneTweets"
   },
   "dependencies": {
+    "@sendgrid/mail": "^6.2.1",
     "aws-sdk": "^2.255.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
