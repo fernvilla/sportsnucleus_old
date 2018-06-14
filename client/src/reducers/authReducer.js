@@ -1,4 +1,4 @@
-import { SET_CURRENT_USER } from './../actions/types';
+import { SET_CURRENT_USER, LOGGING_IN_USER, REGISTERING_USER } from './../actions/types';
 import isEmpty from './../validation/isEmpty';
 
 const initialState = {
@@ -6,7 +6,27 @@ const initialState = {
   user: {}
 };
 
-export default function(state = initialState, action) {
+export const loggingInUser = (state = false, action) => {
+  switch (action.type) {
+    case LOGGING_IN_USER:
+      return action.isLoggingIn;
+
+    default:
+      return state;
+  }
+};
+
+export const registeringUser = (state = false, action) => {
+  switch (action.type) {
+    case REGISTERING_USER:
+      return action.isRegistering;
+
+    default:
+      return state;
+  }
+};
+
+export const auth = (state = initialState, action) => {
   switch (action.type) {
     case SET_CURRENT_USER:
       return {
@@ -17,4 +37,4 @@ export default function(state = initialState, action) {
     default:
       return state;
   }
-}
+};

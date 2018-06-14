@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const League = require('./../../models/League');
+const validateLeagueInput = require('./../../validation/league');
 
 router
   .route('/')
@@ -21,30 +22,47 @@ router
       });
   })
   .post((req, res) => {
-    const {
-      body: { name, slug, website, shortName }
-    } = req;
+    const { errors, isValid } = validateRegisterInput(req.body);
 
-    const newLeague = new League({
-      name,
-      slug,
-      website,
-      shortName
-    });
+    League.findOne({ name: req.body.name })
+      .then(league => {
+        if (league) {
+          errors.name = 'Name already exists';
 
-    newLeague.save((err, league) => {
-      if (err) {
-        return res.status(400).json({
-          error: err,
-          message: 'There was an error creating league.'
+          return res.status(400).json(errors);
+        }
+
+        const {
+          body: { name, slug, website, shortName }
+        } = req;
+
+        const newLeague = new League({
+          name,
+          slug,
+          website,
+          shortName
         });
-      }
 
-      res.json({
-        message: 'League created!',
-        payload: league
-      });
-    });
+        newLeague.save((err, league) => {
+          if (err) {
+            return res.status(400).json({
+              error: err,
+              message: 'There was an error creating league.'
+            });
+          }
+
+          res.json({
+            message: 'League created!',
+            payload: league
+          });
+        });
+      })
+      .catch(err =>
+        res.status(500).json({
+          error: err,
+          message: 'There was a problem creating a league.'
+        })
+      );
   });
 
 router

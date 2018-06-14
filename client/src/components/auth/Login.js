@@ -66,6 +66,7 @@ class Login extends Component {
 
   render() {
     const { email, password, errors } = this.state;
+    const { loggingIn } = this.props;
 
     return (
       <Segment basic className="login-form">
@@ -116,7 +117,7 @@ class Login extends Component {
                     )}
                 </Form.Field>
 
-                <Button color="blue" fluid size="large">
+                <Button color="blue" fluid size="large" loading={loggingIn}>
                   Login
                 </Button>
               </Segment>
@@ -134,7 +135,8 @@ class Login extends Component {
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  errors: state.errors
+  errors: state.errors,
+  loggingIn: state.loggingInUser
 });
 
 const mapDispatchToProps = dispatch => ({

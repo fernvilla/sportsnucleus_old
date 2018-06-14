@@ -98,7 +98,8 @@ class SiteNav extends Component {
 }
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  leagues: state.leagues
 });
 
 const mapDispatchToProps = dispatch => ({

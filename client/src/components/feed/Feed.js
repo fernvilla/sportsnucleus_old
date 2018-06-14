@@ -1,35 +1,25 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import { Card, Loader, Container } from 'semantic-ui-react';
+import { connect } from 'react-redux';
 import Masonry from 'react-masonry-component';
 import { Tweet } from './../../components';
 import momentCustom from './../../utils/momentCustom';
+import { fetchTweets } from './../../actions/tweetsActions';
 
 momentCustom();
 
-export default class Feed extends Component {
+class Feed extends Component {
   state = {
     tweets: [],
     tweetsFetched: false
   };
 
   componentDidMount() {
-    this.fetchTweets();
+    this.props.fetchTweets();
   }
 
-  fetchTweets = () => {
-    axios
-      .get(`${this.props.path}`)
-      .then(({ data }) => {
-        console.log(data);
-
-        this.setState({ tweets: data.payload, tweetsFetched: true });
-      })
-      .catch(err => console.error(err));
-  };
-
   renderFeed() {
-    const { tweets } = this.state;
+    const { tweets } = this.props;
 
     if (!tweets.length) return <div> Nothing to see here...</div>;
 
@@ -37,9 +27,9 @@ export default class Feed extends Component {
   }
 
   render() {
-    const { tweetsFetched } = this.state;
+    const { fetchingTweets } = this.props;
 
-    if (!tweetsFetched) {
+    if (fetchingTweets) {
       return <Loader active inline="centered" size="large" />;
     }
 
@@ -59,3 +49,17 @@ export default class Feed extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  tweets: state.tweets,
+  fetchingTweets: state.fetchingTweets
+});
+
+const mapDispatchToProps = dispatch => ({
+  fetchTweets: () => dispatch(fetchTweets())
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Feed);

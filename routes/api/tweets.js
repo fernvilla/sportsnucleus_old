@@ -28,7 +28,7 @@ router.route('/').get((req, res) => {
         });
       }
 
-      res.json({ payload: tweets });
+      res.json(tweets);
     });
 });
 
@@ -47,7 +47,7 @@ router.get('/last_day', (req, res) => {
         });
       }
 
-      res.json({ payload: tweets });
+      res.json(tweets);
     });
 });
 

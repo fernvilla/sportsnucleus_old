@@ -61,6 +61,7 @@ class Register extends Component {
 
   render() {
     const { email, password, passwordConfirm, errors } = this.state;
+    const { registeringUser } = this.props;
 
     return (
       <Segment basic className="login-form">
@@ -136,7 +137,7 @@ class Register extends Component {
                     )}
                 </Form.Field>
 
-                <Button color="blue" fluid size="large">
+                <Button color="blue" fluid size="large" loading={registeringUser}>
                   Sign Up
                 </Button>
               </Segment>
@@ -154,7 +155,8 @@ class Register extends Component {
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  errors: state.errors
+  errors: state.errors,
+  registeringUser: state.registeringUser
 });
 
 const mapDispatchToProps = dispatch => ({

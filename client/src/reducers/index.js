@@ -1,8 +1,18 @@
 import { combineReducers } from 'redux';
-import authReducer from './authReducer';
-import errorReducer from './errorReducer';
+import { errors } from './errorReducer';
+import { tweets, fetchTweetsError, fetchingTweets } from './tweetsReducer';
+import { leagues, fetchLeaguesError, fetchingLeagues } from './leaguesReducer';
+import { auth, loggingInUser, registeringUser } from './authReducer';
 
 export default combineReducers({
-  auth: authReducer,
-  errors: errorReducer
+  errors,
+  auth,
+  loggingInUser,
+  registeringUser,
+  tweets,
+  fetchTweetsError,
+  fetchingTweets,
+  leagues,
+  fetchLeaguesError,
+  fetchingLeagues
 });
