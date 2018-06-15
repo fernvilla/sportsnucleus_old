@@ -11,7 +11,7 @@ class LeagueForm extends Component {
     handleClose: PropTypes.func.isRequired
   };
 
-  createLeague = leagueData => {
+  createLeague = ({ leagueData }) => {
     return new Promise((resolve, reject) => {
       axios
         .post('/api/leagues', leagueData)
