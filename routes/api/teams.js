@@ -17,7 +17,7 @@ router
           });
         }
 
-        res.json({ payload: teams });
+        res.json(teams);
       });
   })
   .post((req, res) => {
@@ -33,7 +33,7 @@ router
     });
 
     //Find league to attach to team
-    League.findOne({ shortName: league }, (err, league) => {
+    League.findById(league).exec((err, league) => {
       if (err) {
         return res.status(400).json({
           error: err,
@@ -62,10 +62,7 @@ router
             });
           }
 
-          res.json({
-            message: 'Team created!',
-            payload: team
-          });
+          res.json(team);
         });
       });
     });
@@ -84,7 +81,7 @@ router
           });
         }
 
-        res.json({ payload: team });
+        res.json(team);
       });
   })
   .put((req, res) => {
@@ -96,10 +93,7 @@ router
         });
       }
 
-      res.json({
-        message: 'Team updated!',
-        payload: team
-      });
+      res.json(team);
     });
   })
   .delete((req, res) => {

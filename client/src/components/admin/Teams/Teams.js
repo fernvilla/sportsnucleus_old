@@ -2,26 +2,28 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Loader, Segment, Container, Table, Button, Modal } from 'semantic-ui-react';
 import Swal from 'sweetalert2';
-import LeagueForm from './LeagueForm';
+import { connect } from 'react-redux';
+import TeamForm from './TeamForm';
 
-export default class Leagues extends Component {
+class Teams extends Component {
   state = {
-    leagues: [],
-    leaguesFetched: false,
+    teams: [],
+    teamsFetched: false,
     initialValues: {},
     isEdit: false,
     showModal: false
   };
 
   componentDidMount() {
-    this.fetchLeagues();
+    this.fetchTeams();
   }
 
-  fetchLeagues = () => {
+  fetchTeams = () => {
     axios
-      .get('/api/leagues')
+      .get('/api/teams')
       .then(({ data }) => {
-        this.setState({ leagues: data, leaguesFetched: true });
+        console.log(data);
+        this.setState({ teams: data, teamsFetched: true });
       })
       .catch(err => console.error(err));
   };
@@ -33,8 +35,8 @@ export default class Leagues extends Component {
     this.resetForm();
   };
 
-  editHandler = league => {
-    this.setState({ showModal: true, isEdit: true, initialValues: league });
+  editHandler = team => {
+    this.setState({ showModal: true, isEdit: true, initialValues: team });
   };
 
   resetForm = () => {
@@ -44,30 +46,31 @@ export default class Leagues extends Component {
   deleteHandler = id => {
     Swal({
       title: 'Are you sure?',
-      text: 'You will not be able to recover this league!',
+      text: 'You will not be able to recover this team!',
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Yes, delete it!',
       cancelButtonText: 'No, keep it'
     }).then(result => {
-      if (result.value) this.deleteLeague(id);
+      if (result.value) this.deleteTeam(id);
     });
   };
 
-  deleteLeague = id => {
+  deleteTeam = id => {
     axios
-      .delete(`/api/leagues/${id}`)
+      .delete(`/api/teams/${id}`)
       .then(res => {
         Swal('Deleted!', 'Leauge has been deleted.', 'success');
-        this.fetchLeagues();
+        this.fetchTeams();
       })
       .catch(err => console.error(err));
   };
 
   render() {
-    const { leaguesFetched, leagues, initialValues, isEdit, showModal } = this.state;
+    const { teamsFetched, teams, initialValues, isEdit, showModal } = this.state;
+    const { leagues } = this.props;
 
-    if (!leaguesFetched) {
+    if (!teamsFetched) {
       return <Loader active inline="centered" size="large" />;
     }
 
@@ -77,23 +80,24 @@ export default class Leagues extends Component {
           <Modal
             trigger={
               <Button color="green" size="tiny" onClick={this.handleOpen}>
-                Add League
+                Add Team
               </Button>
             }
             onClose={this.handleClose}
             size="tiny"
             closeIcon
             open={showModal}>
-            <Modal.Header>{isEdit ? 'Edit' : 'Add'} League</Modal.Header>
+            <Modal.Header>{isEdit ? 'Edit' : 'Add'} Team</Modal.Header>
 
             <Modal.Content>
               <Modal.Description>
-                <LeagueForm
-                  fetchLeagues={this.fetchLeagues}
+                <TeamForm
+                  fetchTeams={this.fetchTeams}
                   initialValues={initialValues}
                   isEdit={isEdit}
                   handleClose={this.handleClose}
                   enableReinitialize
+                  leagues={leagues}
                 />
               </Modal.Description>
             </Modal.Content>
@@ -111,7 +115,7 @@ export default class Leagues extends Component {
             </Table.Header>
 
             <Table.Body>
-              {leagues.map(l => {
+              {teams.map(l => {
                 return (
                   <Table.Row key={l._id}>
                     <Table.Cell>{l.name}</Table.Cell>
@@ -141,3 +145,12 @@ export default class Leagues extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  leagues: state.leagues
+});
+
+export default connect(
+  mapStateToProps,
+  null
+)(Teams);

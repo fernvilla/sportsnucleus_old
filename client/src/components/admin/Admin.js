@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Route } from 'react-router-dom';
-import { AdminNav, Dashboard, Leagues } from './../../components';
+import { AdminNav, Dashboard, Leagues, Teams } from './../../components';
 
 import './../../stylesheets/admin.css';
 
@@ -14,6 +14,7 @@ const Admin = props => {
       <AdminNav />
       <Route exact path={path} component={Dashboard} />
       <Route exact path={`${path}/leagues`} component={Leagues} />
+      <Route exact path={`${path}/teams`} component={Teams} />
     </Fragment>
   );
 };
