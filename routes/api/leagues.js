@@ -22,7 +22,11 @@ router
       });
   })
   .post((req, res) => {
-    const { errors, isValid } = validateRegisterInput(req.body);
+    const { errors, isValid } = validateLeagueInput(req.body);
+
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
 
     League.findOne({ name: req.body.name })
       .then(league => {
@@ -33,8 +37,12 @@ router
         }
 
         const {
-          body: { name, slug, website, shortName }
+          body: { name, slug, website, shortName, isAdmin }
         } = req;
+
+        if (isAdmin) {
+          return res.status(400).json(errors);
+        }
 
         const newLeague = new League({
           name,

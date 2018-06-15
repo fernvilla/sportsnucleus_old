@@ -16,9 +16,11 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
     "redux": "^4.0.0",
+    "redux-form": "^7.4.0",
     "redux-thunk": "^2.3.0",
     "semantic-ui-css": "^2.3.1",
-    "semantic-ui-react": "^0.81.1"
+    "semantic-ui-react": "^0.81.1",
+    "sweetalert2": "^7.22.2"
   },
   "scripts": {
     "start": "react-scripts start",

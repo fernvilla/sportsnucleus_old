@@ -1,82 +1,109 @@
 import React, { Component } from 'react';
-import { Button, Modal, Input, Form } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
+import { Button, Form } from 'semantic-ui-react';
+import { Field, reduxForm } from 'redux-form';
 import axios from 'axios';
 
-export default class LeagueForm extends Component {
-  state = {
-    name: '',
-    slug: '',
-    website: '',
-    shortName: ''
+class LeagueForm extends Component {
+  static propTypes = {
+    fetchLeagues: PropTypes.func.isRequired,
+    isEdit: PropTypes.bool.isRequired,
+    handleClose: PropTypes.func.isRequired
   };
 
-  onChange = e => {
-    const {
-      target: { value, name }
-    } = e;
-
-    this.setState({ [name]: value });
+  createLeague = leagueData => {
+    return new Promise((resolve, reject) => {
+      axios
+        .post('/api/leagues', leagueData)
+        .then(res => {
+          resolve(res);
+          this.props.fetchLeagues();
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
   };
 
-  onSubmit = e => {
-    e.preventDefault();
+  editLeague = ({ id, leagueData }) => {
+    return new Promise((resolve, reject) => {
+      axios
+        .put(`/api/leagues/${id}`, leagueData)
+        .then(res => {
+          resolve(res);
+          this.props.fetchLeagues();
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  };
 
-    const { name, slug, website, shortName } = this.state;
-    const leagueData = { name, slug, website, shortName };
+  handleSubmit = formValues => {
+    const { handleClose, isEdit } = this.props;
+    const action = isEdit ? this.editLeague : this.createLeague;
 
-    console.log(leagueData);
+    return new Promise((resolve, reject) => {
+      const obj = {
+        leagueData: formValues
+      };
 
-    axios
-      .post('/api/leagues', leagueData)
-      .then(res => {
-        console.log(res);
+      if (isEdit) {
+        obj.id = formValues._id;
+      }
 
-        // this.setState({ tweets: data.payload, tweetsFetched: true });
-      })
-      .catch(err => console.error(err));
+      action(obj)
+        .then(() => {
+          resolve();
+          handleClose();
+        })
+        .catch(err => {
+          reject(err);
+        });
+    }).catch(err => console.error(err));
   };
 
   render() {
+    const { handleSubmit, reset, submitting, handleClose } = this.props;
+
     return (
-      <Modal
-        size="tiny"
-        trigger={
-          <Button color="green" size="tiny">
-            Add League
-          </Button>
-        }>
-        <Modal.Header>Add League</Modal.Header>
+      <Form onSubmit={handleSubmit(this.handleSubmit)}>
+        <Form.Field>
+          <label>Name</label>
+          <Field name="name" component="input" type="text" placeholder="Name" />
+        </Form.Field>
 
-        <Modal.Content>
-          <Modal.Description>
-            <Form>
-              <Form.Field>
-                <label>Name</label>
-                <Input name="name" placeholder="Name" onChange={this.onChange} />
-              </Form.Field>
+        <Form.Field>
+          <label>Short Name</label>
+          <Field name="shortName" component="input" type="text" placeholder="Short Name" />
+        </Form.Field>
 
-              <Form.Field>
-                <label>Short Name</label>
-                <Input name="shortName" placeholder="Short Name" onChange={this.onChange} />
-              </Form.Field>
+        <Form.Field>
+          <label>Slug</label>
+          <Field name="slug" component="input" type="text" placeholder="Slug" />
+        </Form.Field>
 
-              <Form.Field>
-                <label>Slug</label>
-                <Input name="slug" placeholder="Slug" onChange={this.onChange} />
-              </Form.Field>
+        <Form.Field>
+          <label>Website</label>
+          <Field name="website" component="input" type="text" placeholder="Website" />
+        </Form.Field>
 
-              <Form.Field>
-                <label>Website</label>
-                <Input name="website" placeholder="Website" onChange={this.onChange} />
-              </Form.Field>
+        <Button negative disabled={submitting} onClick={handleClose}>
+          Cancel
+        </Button>
 
-              <Button primary type="button" onClick={this.onSubmit}>
-                Submit
-              </Button>
-            </Form>
-          </Modal.Description>
-        </Modal.Content>
-      </Modal>
+        <Button disabled={submitting} onClick={reset}>
+          Reset
+        </Button>
+
+        <Button primary loading={submitting} disabled={submitting}>
+          Submit
+        </Button>
+      </Form>
     );
   }
 }
+
+export default reduxForm({
+  form: 'LeagueForm'
+})(LeagueForm);
