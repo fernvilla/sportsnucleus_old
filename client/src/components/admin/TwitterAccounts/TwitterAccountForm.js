@@ -7,19 +7,19 @@ import { FormDropdown } from './../../../components';
 
 class TeamForm extends Component {
   static propTypes = {
-    fetchTeams: PropTypes.func.isRequired,
+    fetchTwitterAccounts: PropTypes.func.isRequired,
     isEdit: PropTypes.bool.isRequired,
     handleClose: PropTypes.func.isRequired,
-    leagues: PropTypes.array.isRequired
+    teams: PropTypes.array.isRequired
   };
 
-  createTeam = ({ teamData }) => {
+  createTwitterAccount = ({ twitterAccountData }) => {
     return new Promise((resolve, reject) => {
       axios
-        .post('/api/teams', teamData)
+        .post('/api/twitter_accounts', twitterAccountData)
         .then(res => {
           resolve(res);
-          this.props.fetchTeams();
+          this.props.fetchTwitterAccounts();
         })
         .catch(err => {
           reject(err);
@@ -27,13 +27,13 @@ class TeamForm extends Component {
     });
   };
 
-  editTeam = ({ id, teamData }) => {
+  editTwitterAccount = ({ id, twitterAccountData }) => {
     return new Promise((resolve, reject) => {
       axios
-        .put(`/api/teams/${id}`, teamData)
+        .put(`/api/twitter_accounts/${id}`, twitterAccountData)
         .then(res => {
           resolve(res);
-          this.props.fetchTeams();
+          this.props.fetchTwitterAccounts();
         })
         .catch(err => {
           reject(err);
@@ -43,11 +43,11 @@ class TeamForm extends Component {
 
   handleSubmit = formValues => {
     const { handleClose, isEdit } = this.props;
-    const action = isEdit ? this.editTeam : this.createTeam;
+    const action = isEdit ? this.editTwitterAccount : this.createTwitterAccount;
 
     return new Promise((resolve, reject) => {
       const obj = {
-        teamData: formValues
+        twitterAccountData: formValues
       };
 
       if (isEdit) {
@@ -66,38 +66,39 @@ class TeamForm extends Component {
   };
 
   render() {
-    const { handleSubmit, reset, submitting, handleClose, leagues } = this.props;
-    const leagueOptions = leagues.map(l => ({ value: l._id, text: l.name }));
+    const { handleSubmit, reset, submitting, handleClose, teams } = this.props;
+    const teamOptions = teams.map(t => ({ value: t._id, text: t.name }));
+    const typeOptions = [
+      { value: 'player', text: 'Player' },
+      { value: 'team', text: 'Team' },
+      { value: 'media', text: 'Media' }
+    ];
 
     return (
       <Form onSubmit={handleSubmit(this.handleSubmit)}>
         <Form.Field>
-          <label>Name</label>
-          <Field name="name" component="input" type="text" placeholder="Name" />
+          <label>Screen Name</label>
+          <Field name="screenName" component="input" type="text" placeholder="Screen Name" />
         </Form.Field>
 
         <Form.Field>
-          <label>Short Name</label>
-          <Field name="shortName" component="input" type="text" placeholder="Short Name" />
-        </Form.Field>
-
-        <Form.Field>
-          <label>Slug</label>
-          <Field name="slug" component="input" type="text" placeholder="Slug" />
-        </Form.Field>
-
-        <Form.Field>
-          <label>Website</label>
-          <Field name="website" component="input" type="text" placeholder="Website" />
-        </Form.Field>
-
-        <Form.Field>
-          <label>League</label>
+          <label>Account Type</label>
           <Field
-            name="league"
+            name="accountType"
             component={FormDropdown}
-            placeholder="League"
-            options={leagueOptions}
+            placeholder="Account Type"
+            options={typeOptions}
+            searchable
+          />
+        </Form.Field>
+
+        <Form.Field>
+          <label>Team</label>
+          <Field
+            name="team"
+            component={FormDropdown}
+            placeholder="Team"
+            options={teamOptions}
             searchable
           />
         </Form.Field>

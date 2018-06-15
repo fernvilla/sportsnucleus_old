@@ -3,6 +3,7 @@ import { reducer as form } from 'redux-form';
 import { errors } from './errorReducer';
 import { tweets, fetchTweetsError, fetchingTweets } from './tweetsReducer';
 import { leagues, fetchLeaguesError, fetchingLeagues } from './leaguesReducer';
+import { teams, fetchTeamsError, fetchingTeams } from './teamsReducer';
 import { auth, loggingInUser, registeringUser } from './authReducer';
 
 export default combineReducers({
@@ -16,5 +17,8 @@ export default combineReducers({
   fetchingTweets,
   leagues,
   fetchLeaguesError,
-  fetchingLeagues
+  fetchingLeagues,
+  teams,
+  fetchTeamsError,
+  fetchingTeams
 });

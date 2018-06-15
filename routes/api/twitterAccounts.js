@@ -8,6 +8,7 @@ router
   .get((req, res) => {
     TwitterAccount.find({})
       .lean()
+      .populate('team', 'shortName')
       .exec((err, twitterAccounts) => {
         if (err) {
           return res.status(500).json({
@@ -16,7 +17,7 @@ router
           });
         }
 
-        res.json({ payload: twitterAccounts });
+        res.json(twitterAccounts);
       });
   })
   .post((req, res) => {
@@ -30,7 +31,7 @@ router
     });
 
     //Find team to attach to account
-    Team.findOne({ shortName: team }, (err, team) => {
+    Team.findById(team).exec((err, team) => {
       if (err) {
         return res.status(400).json({
           error: err,
@@ -59,10 +60,7 @@ router
             });
           }
 
-          res.json({
-            message: 'Twitter account created!',
-            payload: twitterAccount
-          });
+          res.json(twitterAccount);
         });
       });
     });
@@ -81,7 +79,7 @@ router
           });
         }
 
-        res.json({ payload: twitterAccount });
+        res.json(twitterAccount);
       });
   })
   .put((req, res) => {
@@ -97,10 +95,7 @@ router
           });
         }
 
-        res.json({
-          message: 'Twitter Account updated!',
-          payload: twitterAccount
-        });
+        res.json(twitterAccount);
       }
     );
   })

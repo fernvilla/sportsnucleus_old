@@ -5,6 +5,7 @@ import jwt_decode from 'jwt-decode';
 import setAuthToken from './utils/setAuthToken';
 import { setCurrentUser, logoutUser } from './actions/authActions';
 import { fetchLeagues } from './actions/leaguesActions';
+import { fetchTeams } from './actions/teamsActions';
 import store from './store';
 import { Admin, Home, SiteNav, Login, Register, AdminRoute } from './components';
 
@@ -28,6 +29,7 @@ if (jwtToken) {
 
 // Grab "initial state" for app
 store.dispatch(fetchLeagues());
+store.dispatch(fetchTeams());
 
 class App extends Component {
   render() {

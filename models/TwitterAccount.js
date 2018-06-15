@@ -7,7 +7,8 @@ const TwitterAccountSchema = new Schema({
     unique: true
   },
   accountType: {
-    required: { type: String, enum: ['team', 'player', 'media'] }
+    type: String,
+    required: true
   },
   team: {
     type: Schema.Types.ObjectId,

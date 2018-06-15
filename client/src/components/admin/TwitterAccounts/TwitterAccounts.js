@@ -3,26 +3,26 @@ import axios from 'axios';
 import { Loader, Segment, Container, Table, Button, Modal } from 'semantic-ui-react';
 import Swal from 'sweetalert2';
 import { connect } from 'react-redux';
-import TeamForm from './TeamForm';
+import TwitterAccountForm from './TwitterAccountForm';
 
-class Teams extends Component {
+class TwitterAccounts extends Component {
   state = {
-    teams: [],
-    teamsFetched: false,
+    twitterAccounts: [],
+    twitterAccountsFetched: false,
     initialValues: {},
     isEdit: false,
     showModal: false
   };
 
   componentDidMount() {
-    this.fetchTeams();
+    this.fetchTwitterAccounts();
   }
 
-  fetchTeams = () => {
+  fetchTwitterAccounts = () => {
     axios
-      .get('/api/teams')
+      .get('/api/twitter_accounts')
       .then(({ data }) => {
-        this.setState({ teams: data, teamsFetched: true });
+        this.setState({ twitterAccounts: data, twitterAccountsFetched: true });
       })
       .catch(err => console.error(err));
   };
@@ -34,9 +34,9 @@ class Teams extends Component {
     this.resetForm();
   };
 
-  editHandler = team => {
-    const initialValues = Object.assign({}, team);
-    initialValues.league = team.league._id;
+  editHandler = twitterAccount => {
+    const initialValues = Object.assign({}, twitterAccount);
+    initialValues.team = twitterAccount.team._id;
 
     this.setState({ showModal: true, isEdit: true, initialValues });
   };
@@ -48,31 +48,37 @@ class Teams extends Component {
   deleteHandler = id => {
     Swal({
       title: 'Are you sure?',
-      text: 'You will not be able to recover this team!',
+      text: 'You will not be able to recover this account!',
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Yes, delete it!',
       cancelButtonText: 'No, keep it'
     }).then(result => {
-      if (result.value) this.deleteTeam(id);
+      if (result.value) this.deleteTwitterAccount(id);
     });
   };
 
-  deleteTeam = id => {
+  deleteTwitterAccount = id => {
     axios
-      .delete(`/api/teams/${id}`)
+      .delete(`/api/twitter_accounts/${id}`)
       .then(res => {
-        Swal('Deleted!', 'League has been deleted.', 'success');
-        this.fetchTeams();
+        Swal('Deleted!', 'Leauge has been deleted.', 'success');
+        this.fetchTwitterAccounts();
       })
       .catch(err => console.error(err));
   };
 
   render() {
-    const { teamsFetched, teams, initialValues, isEdit, showModal } = this.state;
-    const { leagues } = this.props;
+    const {
+      twitterAccountsFetched,
+      twitterAccounts,
+      initialValues,
+      isEdit,
+      showModal
+    } = this.state;
+    const { teams } = this.props;
 
-    if (!teamsFetched) {
+    if (!twitterAccountsFetched) {
       return <Loader active inline="centered" size="large" />;
     }
 
@@ -82,24 +88,24 @@ class Teams extends Component {
           <Modal
             trigger={
               <Button color="green" size="tiny" onClick={this.handleOpen}>
-                Add Team
+                Add Twitter Account
               </Button>
             }
             onClose={this.handleClose}
             size="tiny"
             closeIcon
             open={showModal}>
-            <Modal.Header>{isEdit ? 'Edit' : 'Add'} Team</Modal.Header>
+            <Modal.Header>{isEdit ? 'Edit' : 'Add'} Twitter Account</Modal.Header>
 
             <Modal.Content>
               <Modal.Description>
-                <TeamForm
-                  fetchTeams={this.fetchTeams}
+                <TwitterAccountForm
+                  fetchTwitterAccounts={this.fetchTwitterAccounts}
                   initialValues={initialValues}
                   isEdit={isEdit}
                   handleClose={this.handleClose}
                   enableReinitialize
-                  leagues={leagues}
+                  teams={teams}
                 />
               </Modal.Description>
             </Modal.Content>
@@ -108,28 +114,20 @@ class Teams extends Component {
           <Table celled compact>
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell>Name</Table.HeaderCell>
-                <Table.HeaderCell>Short Name</Table.HeaderCell>
-                <Table.HeaderCell>Slug</Table.HeaderCell>
-                <Table.HeaderCell>Website</Table.HeaderCell>
-                <Table.HeaderCell>League</Table.HeaderCell>
+                <Table.HeaderCell>Screen Name</Table.HeaderCell>
+                <Table.HeaderCell>Account Type</Table.HeaderCell>
+                <Table.HeaderCell>TwitterAccount</Table.HeaderCell>
                 <Table.HeaderCell>Actions</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
 
             <Table.Body>
-              {teams.map(t => {
+              {twitterAccounts.map(t => {
                 return (
                   <Table.Row key={t._id}>
-                    <Table.Cell>{t.name}</Table.Cell>
-                    <Table.Cell>{t.shortName}</Table.Cell>
-                    <Table.Cell>{t.slug}</Table.Cell>
-                    <Table.Cell>
-                      <a href={t.website} target="_blank">
-                        {t.website}
-                      </a>
-                    </Table.Cell>
-                    <Table.Cell>{t.league.shortName}</Table.Cell>
+                    <Table.Cell>{t.screenName}</Table.Cell>
+                    <Table.Cell>{t.accountType}</Table.Cell>
+                    <Table.Cell>{t.team.shortName}</Table.Cell>
                     <Table.Cell>
                       <Button primary size="tiny" onClick={() => this.editHandler(t)}>
                         Edit
@@ -151,10 +149,10 @@ class Teams extends Component {
 }
 
 const mapStateToProps = state => ({
-  leagues: state.leagues
+  teams: state.teams
 });
 
 export default connect(
   mapStateToProps,
   null
-)(Teams);
+)(TwitterAccounts);

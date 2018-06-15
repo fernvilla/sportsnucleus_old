@@ -8,6 +8,7 @@ router
   .get((req, res) => {
     Team.find({})
       .lean()
+      .populate('league', 'shortName')
       .sort({ name: 'desc' })
       .exec((err, teams) => {
         if (err) {
