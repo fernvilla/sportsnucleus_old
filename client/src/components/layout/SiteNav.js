@@ -33,7 +33,7 @@ class SiteNav extends Component {
         </Link>
 
         {isAdmin && (
-          <Link to="/admin">
+          <Link to="/admin/dashboard">
             <Menu.Item name="admin dashboard" />
           </Link>
         )}

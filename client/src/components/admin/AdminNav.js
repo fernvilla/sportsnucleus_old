@@ -8,7 +8,6 @@ const AdminNav = () => {
       <Container>
         <Menu pointing secondary>
           <Menu.Item as={NavLink} to="/admin/dashboard" name="dashboard" />
-
           <Menu.Item as={NavLink} to="/admin/leagues" name="leagues" />
           <Menu.Item as={NavLink} to="/admin/teams" name="teams" />
           <Menu.Item as={NavLink} to="/admin/twitterAccounts" name="twitterAccounts" />
