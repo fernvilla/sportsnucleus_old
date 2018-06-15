@@ -32,7 +32,15 @@ app.use(cookieParser());
 app.use(helmet());
 
 // Enable CORS
-app.use(cors());
+const corsOptions = {
+  origin: 'http://sportsnucleus.io',
+  optionsSuccessStatus: 200
+}
+
+app.use(cors({
+  origin: 'http://sportsnucleus.io',
+  optionsSuccessStatus: 200
+}));
 
 // Passport middleware
 app.use(passport.initialize());
