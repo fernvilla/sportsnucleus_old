@@ -14,6 +14,7 @@ export { default as Dashboard } from './admin/Dashboard';
 export { default as Leagues } from './admin/Leagues/Leagues';
 export { default as Teams } from './admin/Teams/Teams';
 export { default as TwitterAccounts } from './admin/TwitterAccounts/TwitterAccounts';
+export { default as Users } from './admin/Users/Users';
 
 export { default as PrivateRoute } from './common/PrivateRoute';
 export { default as AdminRoute } from './common/AdminRoute';

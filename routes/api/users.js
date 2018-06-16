@@ -8,6 +8,43 @@ const passport = require('passport');
 const validateRegisterInput = require('./../../validation/register');
 const validateLoginInput = require('./../../validation/login');
 
+router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
+  if (!req.user.isAdmin) {
+    return res.status(500).json('Unauthorized -  Admins only');
+  }
+
+  User.find({})
+    .lean()
+    .select('-password')
+    .sort({ date: 'desc' })
+    .exec((err, users) => {
+      if (err) {
+        return res.status(500).json({
+          error: err,
+          message: 'There was an error retrieving users.'
+        });
+      }
+
+      res.json(users);
+    });
+});
+
+router.delete('/:user_id', passport.authenticate('jwt', { session: false }), (req, res) => {
+  if (!req.user.isAdmin) {
+    return res.status(500).json('Unauthorized -  Admins only');
+  }
+
+  User.findByIdAndRemove(req.params.user_id, (err, user) => {
+    if (err)
+      return res.status(400).json({
+        error: err,
+        message: 'There was an error deleting user.'
+      });
+
+    res.json({ message: 'User deleted!' });
+  });
+});
+
 router.post('/register', (req, res) => {
   const { errors, isValid } = validateRegisterInput(req.body);
 
@@ -106,6 +143,7 @@ router.post('/login', (req, res) => {
 
 router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
   const { id, email, isAdmin, date } = req.user;
+
   res.json({
     payload: { id, email, isAdmin, date }
   });
