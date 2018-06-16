@@ -18,12 +18,17 @@ mongoose.connection.on('connected', () => initParser());
 
 const disconnectDb = () => mongoose.disconnect();
 
+let totalAccounts = 0;
+let processedAccounts = 0;
+
 const initParser = () => {
   TwitterAccount.find({}).exec((err, twitterAccounts) => {
     if (err || !twitterAccounts.length) return disconnectDb();
 
     totalAccounts = twitterAccounts.length;
-    twitterAccounts.map(twitterAccount => fetchTweets(twitterAccount.screenName));
+    console.log('totalAccounts', totalAccounts);
+
+    twitterAccounts.map(twitterAccount => processTweets(twitterAccount.screenName));
   });
 };
 
@@ -35,20 +40,18 @@ const checkForDisconnect = () => {
   }
 };
 
-let processedAccounts = 0;
-let totalAccounts = 0;
-let processedTweets = 0;
-let totalTweets = 0;
+const processTweets = screenName => {
+  let totalTweets = 0;
+  let processedTweets = 0;
 
-const checkAllTweetsProcessed = () => {
-  processedTweets++;
+  const checkAllTweetsProcessed = () => {
+    processedTweets++;
 
-  if (processedTweets === totalTweets) {
-    checkForDisconnect();
-  }
-};
+    if (processedTweets === totalTweets) {
+      checkForDisconnect();
+    }
+  };
 
-const fetchTweets = screenName => {
   T.get(
     'statuses/user_timeline',
     {
@@ -74,43 +77,35 @@ const fetchTweets = screenName => {
           imageUrl: image
         });
 
-        addItemsToTweet(screenName, tweet, image);
+        TwitterAccount.findOne({ screenName }, (err, twitterAccount) => {
+          if (err) {
+            checkAllTweetsProcessed();
+            return console.log(`find twitter account error: ${err}`);
+          }
+
+          tweet.twitterAccount = twitterAccount._id;
+
+          tweet.save((err, tweet) => {
+            if (err) {
+              checkAllTweetsProcessed();
+
+              return console.log(`tweet save error: ${err}`);
+            }
+
+            twitterAccount.tweets.push(tweet);
+
+            twitterAccount.save(err => {
+              if (err) {
+                checkAllTweetsProcessed();
+
+                return console.log(`twitterAccount save error: ${err}`);
+              }
+
+              checkAllTweetsProcessed();
+            });
+          });
+        });
       });
     }
   );
-};
-
-const addItemsToTweet = (screenName, tweet, image) => {
-  TwitterAccount.findOne({ screenName }, (err, twitterAccount) => {
-    if (err) {
-      checkAllTweetsProcessed();
-      return console.log(`find twitter account error: ${err}`);
-    }
-
-    tweet.twitterAccount = twitterAccount._id;
-
-    saveTweet(tweet, twitterAccount);
-  });
-};
-
-const saveTweet = (tweet, twitterAccount) => {
-  tweet.save((err, tweet) => {
-    if (err) {
-      checkAllTweetsProcessed();
-
-      return console.log(`tweet save error: ${err}`);
-    }
-
-    twitterAccount.tweets.push(tweet);
-
-    twitterAccount.save(err => {
-      if (err) {
-        checkAllTweetsProcessed();
-
-        return console.log(`twitterAccount save error: ${err}`);
-      }
-
-      checkAllTweetsProcessed();
-    });
-  });
 };
