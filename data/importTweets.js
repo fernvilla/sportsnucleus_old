@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const TwitterAccount = require('./../models/TwitterAccount');
+const Team = require('./../models/Team');
 const Tweet = require('./../models/Tweet');
 const Twit = require('twit');
 const mongoose = require('mongoose');
@@ -27,7 +28,7 @@ const initParser = () => {
 
     totalAccounts = twitterAccounts.length;
 
-    twitterAccounts.map(twitterAccount => processTweets(twitterAccount.screenName));
+    twitterAccounts.map(twitterAccount => processTweets(twitterAccount));
   });
 };
 
@@ -39,7 +40,8 @@ const checkForDisconnect = () => {
   }
 };
 
-const processTweets = screenName => {
+const processTweets = twitterAccount => {
+  const { screenName, team, _id } = twitterAccount;
   let totalTweets = 0;
   let processedTweets = 0;
 
@@ -73,16 +75,17 @@ const processTweets = screenName => {
           published: d.created_at,
           userName: d.user.name,
           profileImageUrl: d.user.profile_image_url,
-          imageUrl: image
+          imageUrl: image,
+          twitterAccount: _id
         });
 
-        TwitterAccount.findOne({ screenName }, (err, twitterAccount) => {
+        Team.findById(team, (err, team) => {
           if (err) {
             checkAllTweetsProcessed();
             return console.log(`find twitter account error: ${err}`);
           }
 
-          tweet.twitterAccount = twitterAccount._id;
+          tweet.team = team._id;
 
           tweet.save((err, tweet) => {
             if (err) {
@@ -91,13 +94,13 @@ const processTweets = screenName => {
               return console.log(`tweet save error: ${err}`);
             }
 
-            twitterAccount.tweets.push(tweet);
+            team.tweets.push(tweet);
 
-            twitterAccount.save(err => {
+            team.save(err => {
               if (err) {
                 checkAllTweetsProcessed();
 
-                return console.log(`twitterAccount save error: ${err}`);
+                return console.log(`team save error: ${err}`);
               }
 
               checkAllTweetsProcessed();

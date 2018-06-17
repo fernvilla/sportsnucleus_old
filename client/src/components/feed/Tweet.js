@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Card, Image, Icon, Popup } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 const Tweet = ({ tweet }) => {
   const {
-    twitterAccount: {
-      team: { name }
-    }
+    team: { name, slug },
+    twitterAccount: { screenName }
   } = tweet;
 
   const timeSince = moment
@@ -45,10 +45,12 @@ const Tweet = ({ tweet }) => {
         </Card.Meta>
 
         <Card.Description>
-          <div>{name}</div>
           <div>
-            <a href={`https://www.twitter.com/${tweet.twitterAccount.screenName}`}>
-              @{tweet.twitterAccount.screenName}
+            <Link to={`/teams/${slug}`}>{name}</Link>
+          </div>
+          <div>
+            <a href={`https://www.twitter.com/${screenName}`} target="_blank">
+              @{screenName}
             </a>
           </div>
         </Card.Description>

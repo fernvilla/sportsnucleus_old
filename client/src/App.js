@@ -5,9 +5,8 @@ import jwt_decode from 'jwt-decode';
 import setAuthToken from './utils/setAuthToken';
 import { setCurrentUser, logoutUser } from './actions/authActions';
 import { fetchLeagues } from './actions/leaguesActions';
-import { fetchTeams } from './actions/teamsActions';
 import store from './store';
-import { Admin, Home, SiteNav, Login, Register, AdminRoute } from './components';
+import { Admin, Home, SiteNav, Login, Register, AdminRoute, Team } from './components';
 
 const { jwtToken } = localStorage;
 
@@ -29,7 +28,6 @@ if (jwtToken) {
 
 // Grab "initial state" for app
 store.dispatch(fetchLeagues());
-store.dispatch(fetchTeams());
 
 class App extends Component {
   render() {
@@ -39,10 +37,13 @@ class App extends Component {
           <div>
             <SiteNav />
 
-            <Route exact path={'/login'} component={Login} />
-            <Route exact path={'/signup'} component={Register} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/signup" component={Register} />
             <Switch>
               <AdminRoute path="/admin" component={Admin} />
+            </Switch>
+            <Switch>
+              <Route exact path="/teams/:team" component={Team} />
             </Switch>
             <Route exact path="/" component={Home} />
           </div>

@@ -70,10 +70,25 @@ router
   });
 
 router
-  .route('/:team_id')
+  .route('/:slug')
   .get((req, res) => {
-    Team.findById(req.params.team_id)
-      .populate('twitterAccounts')
+    Team.findOne({ slug: req.params.slug })
+      .populate({
+        path: 'tweets',
+        populate: {
+          path: 'twitterAccount',
+          model: 'TwitterAccount',
+          select: 'screenName'
+        }
+      })
+      .populate({
+        path: 'tweets',
+        populate: {
+          path: 'team',
+          model: 'Team',
+          select: 'name slug'
+        }
+      })
       .exec((err, team) => {
         if (err) {
           return res.status(400).json({
@@ -119,4 +134,31 @@ router
     });
   });
 
+router //Get all teams without referenced documents
+  .get('/basic', (req, res) => {
+    Team.find({}, { tweets: 0 })
+      .lean()
+      .sort({ name: 'asc' })
+      .exec((err, teams) => {
+        if (err) return res.json({ error: err });
+
+        res.json(teams);
+      });
+  })
+  //Get team tweets
+  .get('/:team/tweets', (req, res) => {
+    Team.findOne({ slug: req.params.team })
+      .lean()
+      .populate({
+        path: 'tweets',
+        options: {
+          sort: { created: 'desc' }
+        }
+      })
+      .exec((err, team) => {
+        if (err) return res.json({ error: err });
+
+        res.json({ payload: team.tweets });
+      });
+  });
 module.exports = router;

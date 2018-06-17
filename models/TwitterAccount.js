@@ -13,13 +13,7 @@ const TwitterAccountSchema = new Schema({
   team: {
     type: Schema.Types.ObjectId,
     ref: 'Team'
-  },
-  tweets: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Tweet'
-    }
-  ]
+  }
 });
 
 module.exports = TwitterAccount = mongoose.model('TwitterAccount', TwitterAccountSchema);

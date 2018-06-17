@@ -22,6 +22,11 @@ const TweetSchema = new Schema(
       ref: 'TwitterAccount',
       required: true
     },
+    team: {
+      type: Schema.Types.ObjectId,
+      ref: 'Team',
+      required: true
+    },
     userName: {
       type: String,
       required: true

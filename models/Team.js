@@ -29,6 +29,12 @@ const TeamSchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: 'TwitterAccount'
     }
+  ],
+  tweets: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Tweet'
+    }
   ]
 });
 
