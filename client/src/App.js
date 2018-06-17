@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from './utils/setAuthToken';
 import { setCurrentUser, logoutUser } from './actions/authActions';
+import { fetchTeams } from './actions/teamsActions';
 import { fetchLeagues } from './actions/leaguesActions';
 import store from './store';
 import { Admin, Home, SiteNav, Login, Register, AdminRoute, Team } from './components';
@@ -28,6 +29,7 @@ if (jwtToken) {
 
 // Grab "initial state" for app
 store.dispatch(fetchLeagues());
+store.dispatch(fetchTeams());
 
 class App extends Component {
   render() {
