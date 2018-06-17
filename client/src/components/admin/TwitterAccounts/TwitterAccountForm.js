@@ -77,7 +77,7 @@ class TeamForm extends Component {
     return (
       <Form onSubmit={handleSubmit(this.handleSubmit)}>
         <Form.Field>
-          <label>Screen Name</label>
+          <label>Account Name</label>
           <Field name="screenName" component="input" type="text" placeholder="Screen Name" />
         </Form.Field>
 

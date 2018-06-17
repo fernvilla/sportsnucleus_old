@@ -114,9 +114,9 @@ class TwitterAccounts extends Component {
           <Table celled compact>
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell>Screen Name</Table.HeaderCell>
+                <Table.HeaderCell>Account Name</Table.HeaderCell>
                 <Table.HeaderCell>Account Type</Table.HeaderCell>
-                <Table.HeaderCell>TwitterAccount</Table.HeaderCell>
+                <Table.HeaderCell>Team</Table.HeaderCell>
                 <Table.HeaderCell>Actions</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
@@ -125,7 +125,11 @@ class TwitterAccounts extends Component {
               {twitterAccounts.map(t => {
                 return (
                   <Table.Row key={t._id}>
-                    <Table.Cell>{t.screenName}</Table.Cell>
+                    <Table.Cell>
+                      <a href={`http://twitter.com/${t.screenName}`} target="_blank">
+                        {t.screenName}
+                      </a>
+                    </Table.Cell>
                     <Table.Cell>{t.accountType}</Table.Cell>
                     <Table.Cell>{t.team.shortName}</Table.Cell>
                     <Table.Cell>

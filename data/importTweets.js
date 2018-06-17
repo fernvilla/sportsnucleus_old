@@ -26,7 +26,6 @@ const initParser = () => {
     if (err || !twitterAccounts.length) return disconnectDb();
 
     totalAccounts = twitterAccounts.length;
-    console.log('totalAccounts', totalAccounts);
 
     twitterAccounts.map(twitterAccount => processTweets(twitterAccount.screenName));
   });
