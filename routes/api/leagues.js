@@ -7,8 +7,13 @@ router
   .get((req, res) => {
     League.find({})
       .lean()
-      .populate('teams', 'slug shortName name')
-      .sort({ name: 'desc' })
+      .populate({
+        path: 'teams',
+        select: 'slug shortName name',
+        match: null,
+        options: { sort: { name: 'asc' } }
+      })
+      .sort({ name: 'asc' })
       .exec((err, leagues) => {
         if (err) {
           return res.status(500).json({
@@ -82,7 +87,6 @@ router
           }
         }
       })
-
       .exec((err, league) => {
         if (err) {
           return res.status(400).json({
