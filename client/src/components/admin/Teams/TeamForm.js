@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Form } from 'semantic-ui-react';
 import { Field, reduxForm } from 'redux-form';
 import axios from 'axios';
+import { fetchTeams } from './../../../actions/teamsActions';
 import { FormDropdown } from './../../../components';
 
 class TeamForm extends Component {
@@ -42,7 +43,7 @@ class TeamForm extends Component {
   };
 
   handleSubmit = formValues => {
-    const { handleClose, isEdit } = this.props;
+    const { handleClose, isEdit, dispatch } = this.props;
     const action = isEdit ? this.editTeam : this.createTeam;
 
     return new Promise((resolve, reject) => {
@@ -58,10 +59,9 @@ class TeamForm extends Component {
         .then(() => {
           resolve();
           handleClose();
+          dispatch(fetchTeams());
         })
-        .catch(err => {
-          reject(err);
-        });
+        .catch(err => reject(err));
     }).catch(err => console.error(err));
   };
 
