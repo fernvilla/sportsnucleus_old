@@ -74,10 +74,24 @@ router
   });
 
 router
-  .route('/:league_id')
+  .route('/:slug')
   .get((req, res) => {
-    League.findById(req.params.league_id)
-      .populate('teams', 'slug shortName name')
+    League.findOne({ slug: req.params.slug })
+      .populate({
+        path: 'teams',
+        select: 'name slug',
+        populate: {
+          path: 'tweets',
+          model: 'Tweet',
+          select: '-createdAt -updatedAt',
+          populate: {
+            path: 'twitterAccount',
+            model: 'TwitterAccount',
+            select: 'screenName'
+          }
+        }
+      })
+
       .exec((err, league) => {
         if (err) {
           return res.status(400).json({

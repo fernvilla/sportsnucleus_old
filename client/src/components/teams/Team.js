@@ -44,7 +44,17 @@ class Team extends Component {
       return <p>Error fetching team</p>;
     }
 
-    return <Feed items={team.tweets} />;
+    let tweets = [];
+
+    team.tweets.map(t => {
+      t.team = team;
+
+      return tweets.push(t);
+    });
+
+    tweets = tweets.sort((a, b) => new Date(a) - new Date(b));
+
+    return <Feed items={tweets} />;
   }
 
   render() {

@@ -7,7 +7,7 @@ import { setCurrentUser, logoutUser } from './actions/authActions';
 import { fetchTeams } from './actions/teamsActions';
 import { fetchLeagues } from './actions/leaguesActions';
 import store from './store';
-import { Admin, Home, SiteNav, Login, Register, AdminRoute, Team } from './components';
+import { Admin, Home, SiteNav, Login, Register, AdminRoute, Team, League } from './components';
 
 const { jwtToken } = localStorage;
 
@@ -46,6 +46,9 @@ class App extends Component {
             </Switch>
             <Switch>
               <Route exact path="/teams/:team" component={Team} />
+            </Switch>
+            <Switch>
+              <Route exact path="/leagues/:league" component={League} />
             </Switch>
             <Route exact path="/" component={Home} />
           </div>

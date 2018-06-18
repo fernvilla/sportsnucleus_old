@@ -81,14 +81,6 @@ router
           select: 'screenName'
         }
       })
-      .populate({
-        path: 'tweets',
-        populate: {
-          path: 'team',
-          model: 'Team',
-          select: 'name slug'
-        }
-      })
       .exec((err, team) => {
         if (err) {
           return res.status(400).json({
