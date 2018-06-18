@@ -21,7 +21,7 @@ export const fetchTweets = () => dispatch => {
   dispatch(fetchingTweets(true));
 
   axios
-    .get('/api/tweets')
+    .get('/api/tweets/last_day')
     .then(({ data }) => {
       dispatch(fetchTweetsSuccess(data));
       dispatch(fetchingTweets(false));

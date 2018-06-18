@@ -28,6 +28,7 @@ router.route('/').get((req, res) => {
 router.get('/last_day', (req, res) => {
   Tweet.find({})
     .lean()
+    .populate('twitterAccount', 'screenName')
     .populate('team', 'name slug')
     .where('published')
     .gte(start)
