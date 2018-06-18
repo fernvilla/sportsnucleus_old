@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const League = require('./../../models/League');
-const validateLeagueInput = require('./../../validation/league');
 
 router
   .route('/')
@@ -22,18 +21,10 @@ router
       });
   })
   .post((req, res) => {
-    const { errors, isValid } = validateLeagueInput(req.body);
-
-    if (!isValid) {
-      return res.status(400).json(errors);
-    }
-
     League.findOne({ name: req.body.name })
       .then(league => {
         if (league) {
-          errors.name = 'Name already exists';
-
-          return res.status(400).json(errors);
+          return res.status(400).json({ error: 'Name already exists' });
         }
 
         const {
@@ -41,7 +32,7 @@ router
         } = req;
 
         if (isAdmin) {
-          return res.status(400).json(errors);
+          return res.status(400).json({ error: 'Not Authorized' });
         }
 
         const newLeague = new League({

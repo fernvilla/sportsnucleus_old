@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Loader, Segment, Container, Table, Button, Modal } from 'semantic-ui-react';
+// import { Loader, Segment, Container, Table, Button, Modal } from 'semantic-ui-react';
+import { Loader, Segment, Container, Table, Button } from 'semantic-ui-react';
 import Swal from 'sweetalert2';
 import moment from 'moment';
 
@@ -65,7 +66,8 @@ export default class Users extends Component {
   };
 
   render() {
-    const { usersFetched, users, initialValues, isEdit, showModal } = this.state;
+    // const { usersFetched, users, initialValues, isEdit, showModal } = this.state;
+    const { usersFetched, users } = this.state;
 
     if (!usersFetched) {
       return <Loader active inline="centered" size="large" />;
