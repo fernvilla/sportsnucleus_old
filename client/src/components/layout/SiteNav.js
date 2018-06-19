@@ -89,7 +89,7 @@ class SiteNav extends Component {
               </Dropdown.Menu>
             </Dropdown>
 
-            {isAuthenticated ? authLinks : guestLinks}
+            {/*{isAuthenticated ? authLinks : guestLinks}*/}
           </Container>
         </Menu>
       </Segment>
