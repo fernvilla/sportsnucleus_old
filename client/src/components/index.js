@@ -20,3 +20,5 @@ export { default as Users } from './admin/Users/Users';
 
 export { default as PrivateRoute } from './common/PrivateRoute';
 export { default as AdminRoute } from './common/AdminRoute';
+
+export { default as FavoritesModal } from './favorites/FavoritesModal';

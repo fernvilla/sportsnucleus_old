@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Container, Header, Button, Segment, Loader } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { fetchTweets } from './../../actions/tweetsActions';
-import { Feed } from './../../components';
+import { Feed, FavoritesModal } from './../../components';
 
 class Home extends Component {
   componentDidMount() {
@@ -25,18 +25,14 @@ class Home extends Component {
             </Header>
 
             <Header as="h2" inverted className="hero-secondary">
-              The center of your sports news universe
+              The center of your sports universe.
             </Header>
 
-            <Button inverted size="large">
-              My Teams
-            </Button>
+            <FavoritesModal />
           </Container>
         </Segment>
 
-        <Segment basic>
-          <Feed items={tweets} />
-        </Segment>
+        <Feed items={tweets} />
       </Fragment>
     );
   }
