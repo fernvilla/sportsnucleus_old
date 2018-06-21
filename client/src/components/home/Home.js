@@ -4,18 +4,24 @@ import { connect } from 'react-redux';
 import { fetchTweets } from './../../actions/tweetsActions';
 import { Feed, FavoritesModal } from './../../components';
 
+import './../../stylesheets/home.css';
+
 class Home extends Component {
   componentDidMount() {
     this.props.fetchTweets();
   }
 
-  render() {
+  renderFeed() {
     const { fetchingTweets, tweets } = this.props;
 
     if (fetchingTweets) {
       return <Loader active inline="centered" size="large" />;
     }
 
+    return <Feed items={tweets} />;
+  }
+
+  render() {
     return (
       <Fragment>
         <Segment inverted vertical className="hero" textAlign="center">
@@ -32,7 +38,7 @@ class Home extends Component {
           </Container>
         </Segment>
 
-        <Feed items={tweets} />
+        {this.renderFeed()}
       </Fragment>
     );
   }

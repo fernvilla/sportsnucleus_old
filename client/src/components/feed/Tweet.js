@@ -4,6 +4,8 @@ import moment from 'moment';
 import { Card, Image, Icon, Popup } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
+import './../../stylesheets/tweet.css';
+
 const Tweet = ({ tweet }) => {
   const {
     team: { name, slug },

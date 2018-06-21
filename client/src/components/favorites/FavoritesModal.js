@@ -1,13 +1,16 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal } from 'semantic-ui-react';
+import { Button, Modal, Icon, Divider } from 'semantic-ui-react';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
 import { addFavoriteTeam, removeFavoriteTeam } from './../../actions/favoritesActions';
-import Favorite from './Favorite';
+
+import './../../stylesheets/favorites.css';
 
 class FavoritesModal extends Component {
   state = {
-    showModal: false
+    showModal: false,
+    hoveredLeague: ''
   };
 
   handleOpen = () => {
@@ -26,37 +29,92 @@ class FavoritesModal extends Component {
     this.props.removeFavoriteTeam(team);
   };
 
-  renderTeams() {
-    const { leagues, favorites } = this.props;
-    const testTeam = 'lakers';
-    const selected = favorites.indexOf(testTeam) > -1;
+  setHoveredLeague = league => {
+    this.setState({ hoveredLeague: league });
+  };
+
+  selectTeam = (e, team) => {
+    const { favorites } = this.props;
+    const selected = favorites.indexOf(team) > -1;
+
+    if (!selected) {
+      return this.addFavorite(team);
+    }
+
+    return this.removeFavorite(team);
+  };
+
+  renderLeagues() {
+    const { leagues } = this.props;
+    const { hoveredLeague } = this.state;
 
     return (
-      <Favorite
-        team={{ shortName: testTeam }}
-        addFavorite={this.addFavorite}
-        removeFavorite={this.removeFavorite}
-        selected={selected}
-      />
+      <div className="favorites-leagues">
+        <p className="favorites-leagues-header">Leagues</p>
+
+        {leagues.map(league => {
+          const selected = hoveredLeague === league.shortName;
+
+          return (
+            <div
+              className={classNames('favorites-league', {
+                selected
+              })}
+              key={league._id}
+              onMouseEnter={() => this.setHoveredLeague(league.shortName)}>
+              {league.shortName}
+
+              <Icon inverted name="chevron right" color={selected ? 'blue' : 'grey'} />
+            </div>
+          );
+        })}
+      </div>
     );
+  }
 
-    // return teams.map(team => {
-    //   const { name, canonical } = team;
-    //   const selected = favorites.indexOf(canonical) > -1;
+  renderTeams() {
+    const { leagues, favorites } = this.props;
+    const { hoveredLeague } = this.state;
 
-    //   return (
-    //     <Favorite
-    //       team={team}
-    //       addFavorite={this.addFavorite}
-    //       removeFavorite={this.removeFavorite}
-    //       selected={selected}
-    //     />
-    //   );
-    // });
+    return (
+      <div className="favorites-teams">
+        {leagues.map(league => {
+          return (
+            <div
+              className={classNames('favorites-team-league', {
+                visible: hoveredLeague === league.shortName
+              })}
+              key={league._id}>
+              {league.teams.map(team => {
+                const selected = favorites.indexOf(team.shortName) > -1;
+
+                return (
+                  <div
+                    className={classNames('favorites-team', {
+                      selected: selected
+                    })}
+                    onClick={e => this.selectTeam(e, team.shortName)}
+                    key={team._id}>
+                    {team.shortName}
+
+                    <Icon
+                      inverted
+                      name={`${selected ? 'minus' : 'plus'} circle`}
+                      color={selected ? 'blue' : 'grey'}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
+    );
   }
 
   render() {
     const { showModal } = this.state;
+    const { favorites } = this.props;
 
     return (
       <div>
@@ -67,14 +125,32 @@ class FavoritesModal extends Component {
             </Button>
           }
           onClose={this.handleClose}
-          size="tiny"
+          size="small"
           closeIcon
-          open={showModal}>
-          <Modal.Header>Set Your Favorites</Modal.Header>
+          open={showModal}
+          centered={false}>
+          <div>
+            <div className="favorites-container">
+              <h2>Set My Teams</h2>
 
-          <Modal.Content>
-            <Modal.Description>{this.renderTeams()}</Modal.Description>
-          </Modal.Content>
+              <div className="favorites-section">
+                {this.renderLeagues()}
+                {this.renderTeams()}
+              </div>
+
+              {!!favorites.length && (
+                <div>
+                  <Divider inverted />
+
+                  <h3>Current Teams</h3>
+
+                  {favorites.map((favorite, i) => {
+                    return <p key={i}>{favorite}</p>;
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
         </Modal>
       </div>
     );

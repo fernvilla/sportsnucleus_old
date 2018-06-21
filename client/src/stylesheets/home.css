@@ -1,0 +1,16 @@
+.hero {
+  min-height: 300px;
+  background-image: url('/images/arena_bg.jpg') !important;
+  background-position: center !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+}
+
+.hero-main {
+  margin-top: 1em !important;
+  font-size: 2.75em !important;
+}
+
+.hero-secondary {
+  margin-bottom: 1em !important;
+}

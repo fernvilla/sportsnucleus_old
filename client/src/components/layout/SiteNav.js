@@ -4,6 +4,7 @@ import { Container, Menu, Dropdown, Segment } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logoutUser } from './../../actions/authActions';
+import './../../stylesheets/nav.css';
 
 class SiteNav extends Component {
   static propTypes = {
@@ -56,7 +57,7 @@ class SiteNav extends Component {
 
     return (
       <Segment basic>
-        <Menu borderless fluid inverted fixed="top" color="black" size="large">
+        <Menu borderless fluid inverted fixed="top" color="black" size="huge">
           <Container>
             <Link to="/">
               <Menu.Item name="home" />

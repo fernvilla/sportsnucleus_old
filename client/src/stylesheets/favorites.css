@@ -1,0 +1,43 @@
+.favorites-container {
+  background-color: #25384f;
+  color: #fff;
+  text-align: left;
+  padding: 2em 1.5em 1.5em;
+}
+
+.favorites-section {
+  display: flex;
+  padding-bottom: 1em;
+}
+
+.favorites-leagues-header {
+  color: #cccccc;
+}
+
+.favorites-leagues,
+.favorites-teams {
+  flex: 1 1 50%;
+}
+
+.favorites-team-league {
+  display: none;
+}
+
+.favorites-team-league.visible {
+  display: block;
+}
+
+.favorites-team,
+.favorites-league {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  padding: 0.75em;
+  border-bottom: 1px solid #cccccc;
+  font-size: 1.2em;
+}
+
+.favorites-league.selected,
+.favorites-team:hover {
+  background: #1c2a3a;
+}
