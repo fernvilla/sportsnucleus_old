@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Menu, Input, Container, Dropdown } from 'semantic-ui-react';
+import { Menu, Input, Container, Label } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 class Filter extends Component {
@@ -10,7 +10,7 @@ class Filter extends Component {
   };
 
   render() {
-    // const { leagues } = this.props;
+    const { favorites } = this.props;
     const { activeFilter } = this.state;
 
     return (
@@ -19,10 +19,11 @@ class Filter extends Component {
           <Menu.Item header>Show:</Menu.Item>
 
           <Menu.Item
-            name="My Teams"
             active={activeFilter === 'Favorites'}
-            onClick={() => this.handleFilterClick('Favorites')}
-          />
+            onClick={() => this.handleFilterClick('Favorites')}>
+            My Teams
+            <Label color="blue">{favorites.length}</Label>
+          </Menu.Item>
 
           <Menu.Item
             name="All"
@@ -30,47 +31,31 @@ class Filter extends Component {
             onClick={() => this.handleFilterClick('All')}
           />
 
-          <Menu.Item
-            name="Team"
-            active={activeFilter === 'Team'}
-            onClick={() => this.handleFilterClick('Team')}
-          />
+          <Menu.Menu position="right">
+            <Menu.Item header>Filter:</Menu.Item>
 
-          <Menu.Item
-            name="Player"
-            active={activeFilter === 'Tweet'}
-            onClick={() => this.handleFilterClick('Tweet')}
-          />
+            <Menu.Item
+              name="Team"
+              active={activeFilter === 'Team'}
+              onClick={() => this.handleFilterClick('Team')}
+            />
 
-          <Menu.Item
-            name="Media"
-            active={activeFilter === 'Article'}
-            onClick={() => this.handleFilterClick('Article')}
-          />
+            <Menu.Item
+              name="Player"
+              active={activeFilter === 'Tweet'}
+              onClick={() => this.handleFilterClick('Tweet')}
+            />
 
-          {/*<Dropdown item simple text="Team Feeds">
-            <Dropdown.Menu>
-              {leagues.map(league => {
-                return (
-                  <Dropdown.Item key={league._id}>
-                    <i className="dropdown icon" />
-                    {league.shortName}
+            <Menu.Item
+              name="Media"
+              active={activeFilter === 'Article'}
+              onClick={() => this.handleFilterClick('Article')}
+            />
 
-                    <Dropdown.Menu>
-                      {league.teams.map(team => {
-                        return <Dropdown.Item key={team._id}>{team.name}</Dropdown.Item>;
-                      })}
-                    </Dropdown.Menu>
-                  </Dropdown.Item>
-                );
-              })}
-            </Dropdown.Menu>
-          </Dropdown>
-            */}
-
-          <Menu.Item position="right">
-            <Input className="icon" icon="search" placeholder="Filter..." />
-          </Menu.Item>
+            <Menu.Item position="right">
+              <Input className="icon" icon="search" placeholder="Search..." />
+            </Menu.Item>
+          </Menu.Menu>
         </Container>
       </Menu>
     );
@@ -78,7 +63,7 @@ class Filter extends Component {
 }
 
 const mapStateToProps = state => ({
-  leagues: state.leagues
+  favorites: state.favorites
 });
 
 export default connect(

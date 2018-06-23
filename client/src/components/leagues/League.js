@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import DocumentTitle from 'react-document-title';
-import { Loader } from 'semantic-ui-react';
-import { Feed, LeagueHeader } from './../../components';
+import { Feed, LeagueHeader, Loader } from './../../components';
 import { fetchLeague } from './../../actions/leaguesActions';
 
 class League extends Component {
@@ -37,7 +36,7 @@ class League extends Component {
     const { league, fetchingLeague, hasErrored } = this.props;
 
     if (fetchingLeague) {
-      return <Loader active inline="centered" size="large" />;
+      return <Loader />;
     }
 
     if (hasErrored) {

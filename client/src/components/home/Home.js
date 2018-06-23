@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react';
-import { Container, Header, Button, Segment, Loader } from 'semantic-ui-react';
+import { Container, Header, Segment } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { fetchTweets } from './../../actions/tweetsActions';
-import { Feed, FavoritesModal } from './../../components';
+import { Feed, FavoritesModal, Loader } from './../../components';
 
 import './../../stylesheets/home.css';
 
@@ -15,7 +15,7 @@ class Home extends Component {
     const { fetchingTweets, tweets } = this.props;
 
     if (fetchingTweets) {
-      return <Loader active inline="centered" size="large" />;
+      return <Loader />;
     }
 
     return <Feed items={tweets} />;

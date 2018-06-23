@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Loader, Segment, Container, Table, Button, Modal } from 'semantic-ui-react';
+import { Segment, Container, Table, Button, Modal } from 'semantic-ui-react';
 import Swal from 'sweetalert2';
 import { connect } from 'react-redux';
 import TwitterAccountForm from './TwitterAccountForm';
+import { Loader } from './../../../components';
 
 class TwitterAccounts extends Component {
   state = {
@@ -79,7 +80,7 @@ class TwitterAccounts extends Component {
     const { teams } = this.props;
 
     if (!twitterAccountsFetched) {
-      return <Loader active inline="centered" size="large" />;
+      return <Loader />;
     }
 
     return (

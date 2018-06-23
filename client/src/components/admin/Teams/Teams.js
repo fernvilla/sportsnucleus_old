@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Loader, Segment, Container, Table, Button, Modal } from 'semantic-ui-react';
+import { Segment, Container, Table, Button, Modal } from 'semantic-ui-react';
 import Swal from 'sweetalert2';
 import { connect } from 'react-redux';
 import TeamForm from './TeamForm';
+import { Loader } from './../../../components';
 
 class Teams extends Component {
   state = {
@@ -73,7 +74,7 @@ class Teams extends Component {
     const { leagues } = this.props;
 
     if (!teamsFetched) {
-      return <Loader active inline="centered" size="large" />;
+      return <Loader />;
     }
 
     return (

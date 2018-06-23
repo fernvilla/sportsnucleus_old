@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Loader, Segment, Container, Table, Button, Modal } from 'semantic-ui-react';
+import { Segment, Container, Table, Button, Modal } from 'semantic-ui-react';
 import Swal from 'sweetalert2';
 import LeagueForm from './LeagueForm';
+import { Loader } from './../../../components';
 
 export default class Leagues extends Component {
   state = {
@@ -68,7 +69,7 @@ export default class Leagues extends Component {
     const { leaguesFetched, leagues, initialValues, isEdit, showModal } = this.state;
 
     if (!leaguesFetched) {
-      return <Loader active inline="centered" size="large" />;
+      return <Loader />;
     }
 
     return (

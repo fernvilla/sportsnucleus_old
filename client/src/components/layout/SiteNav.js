@@ -20,44 +20,44 @@ class SiteNav extends Component {
 
   render() {
     const {
-      leagues,
-      auth: {
-        isAuthenticated,
-        user: { isAdmin }
-      }
+      leagues
+      // auth: {
+      //   isAuthenticated,
+      //   user: { isAdmin }
+      // }
     } = this.props;
 
-    const authLinks = (
-      <Menu.Menu position="right">
-        <Link to="/profile">
-          <Menu.Item name="profile" />
-        </Link>
+    // const authLinks = (
+    //   <Menu.Menu position="right">
+    //     <Link to="/profile">
+    //       <Menu.Item name="profile" />
+    //     </Link>
 
-        {isAdmin && (
-          <Link to="/admin/dashboard">
-            <Menu.Item name="admin dashboard" />
-          </Link>
-        )}
+    //     {isAdmin && (
+    //       <Link to="/admin/dashboard">
+    //         <Menu.Item name="admin dashboard" />
+    //       </Link>
+    //     )}
 
-        <Menu.Item name="logout" link onClick={this.onLogoutClick} />
-      </Menu.Menu>
-    );
+    //     <Menu.Item name="logout" link onClick={this.onLogoutClick} />
+    //   </Menu.Menu>
+    // );
 
-    const guestLinks = (
-      <Menu.Menu position="right">
-        <Link to="/login">
-          <Menu.Item name="login" />
-        </Link>
+    // const guestLinks = (
+    //   <Menu.Menu position="right">
+    //     <Link to="/login">
+    //       <Menu.Item name="login" />
+    //     </Link>
 
-        <Link to="signup">
-          <Menu.Item name="signup" />
-        </Link>
-      </Menu.Menu>
-    );
+    //     <Link to="signup">
+    //       <Menu.Item name="signup" />
+    //     </Link>
+    //   </Menu.Menu>
+    // );
 
     return (
       <Segment basic>
-        <Menu borderless fluid inverted fixed="top" color="black" size="huge">
+        <Menu borderless fluid inverted fixed="top" color="black" size="large">
           <Container>
             <Link to="/">
               <Menu.Item name="home" />
