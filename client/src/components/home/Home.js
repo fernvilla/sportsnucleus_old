@@ -1,14 +1,20 @@
 import React, { Component, Fragment } from 'react';
 import { Container, Header, Segment } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { fetchTweets } from './../../actions/tweetsActions';
+import { fetchTweets, fetchTweetsByTeams } from './../../actions/tweetsActions';
 import { Feed, FavoritesModal, Loader } from './../../components';
 
 import './../../stylesheets/home.css';
 
 class Home extends Component {
   componentDidMount() {
-    this.props.fetchTweets();
+    const { fetchTweets, fetchTweetsByTeams, favorites } = this.props;
+
+    if (favorites.length) {
+      fetchTweetsByTeams(favorites);
+    } else {
+      fetchTweets();
+    }
   }
 
   renderFeed() {
@@ -46,11 +52,13 @@ class Home extends Component {
 
 const mapStateToProps = state => ({
   tweets: state.tweets,
+  favorites: state.favorites,
   fetchingTweets: state.fetchingTweets
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchTweets: () => dispatch(fetchTweets())
+  fetchTweets: () => dispatch(fetchTweets()),
+  fetchTweetsByTeams: teams => dispatch(fetchTweetsByTeams(teams))
 });
 
 export default connect(

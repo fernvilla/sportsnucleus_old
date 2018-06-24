@@ -21,7 +21,22 @@ export const fetchTweets = () => dispatch => {
   dispatch(fetchingTweets(true));
 
   axios
-    .get('/api/tweets/last_day')
+    .get('/api/tweets/teams')
+    .then(({ data }) => {
+      dispatch(fetchTweetsSuccess(data));
+      dispatch(fetchingTweets(false));
+    })
+    .catch(err => {
+      dispatch(fetchingTweets(false));
+      dispatch(fetchTweetsError(true));
+    });
+};
+
+export const fetchTweetsByTeams = teams => dispatch => {
+  dispatch(fetchingTweets(true));
+
+  axios
+    .post(`/api/tweets/teams`, { teams })
     .then(({ data }) => {
       dispatch(fetchTweetsSuccess(data));
       dispatch(fetchingTweets(false));

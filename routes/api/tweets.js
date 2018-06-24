@@ -25,6 +25,37 @@ router.route('/').get((req, res) => {
     });
 });
 
+router.route('/teams').post((req, res) => {
+  Tweet.find({})
+    .lean()
+    .populate('twitterAccount', 'screenName')
+    .populate('team', 'name slug')
+    .sort({ published: 'desc' })
+    .exec((err, tweets) => {
+      if (err) {
+        return res.status(500).json({
+          error: err,
+          message: 'There was an error retrieving tweets.'
+        });
+      }
+      const { teams } = req.body;
+
+      if (!teams || !teams.length) return res.json([]);
+
+      let newTweets = [];
+
+      teams.map(team => {
+        const filtered = tweets.filter(t => t.team.slug === team);
+
+        return (newTweets = [...newTweets, ...filtered]);
+      });
+
+      newTweets.sort((a, b) => new Date(b.published) - new Date(a.published));
+
+      res.json(newTweets);
+    });
+});
+
 router.get('/last_day', (req, res) => {
   Tweet.find({})
     .lean()

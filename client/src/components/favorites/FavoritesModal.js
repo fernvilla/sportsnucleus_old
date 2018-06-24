@@ -93,7 +93,7 @@ class FavoritesModal extends Component {
                     className={classNames('favorites-team', {
                       selected: selected
                     })}
-                    onClick={e => this.selectTeam(e, team.shortName)}
+                    onClick={e => this.selectTeam(e, team.slug)}
                     key={team._id}>
                     {team.shortName}
 
