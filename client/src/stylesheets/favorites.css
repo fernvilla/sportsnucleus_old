@@ -41,3 +41,7 @@
 .favorites-team:hover {
   background: #1c2a3a;
 }
+
+.favorites-current-team {
+  text-transform: capitalize;
+}

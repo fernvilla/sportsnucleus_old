@@ -1,14 +1,17 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Card, Container, Segment } from 'semantic-ui-react';
 import Masonry from 'react-masonry-component';
-import { Tweet } from './../../components';
+import { Tweet, Loader } from './../../components';
 import momentCustom from './../../utils/momentCustom';
 import Filter from './Filter';
 
 momentCustom();
 
-const Feed = ({ items }) => {
+const Feed = ({ items, isLoading }) => {
   const renderFeed = () => {
+    if (isLoading) return <Loader />;
+
     if (!items.length) return <div> Nothing to see here...</div>;
 
     return items.map(item => <Tweet tweet={item} key={item._id} />);
@@ -34,6 +37,10 @@ const Feed = ({ items }) => {
       </Segment>
     </div>
   );
+};
+
+Feed.propTypes = {
+  isLoading: PropTypes.bool.isRequired
 };
 
 export default Feed;

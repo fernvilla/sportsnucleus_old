@@ -17,11 +17,11 @@ export const fetchTweetsSuccess = tweets => ({
   tweets
 });
 
-export const fetchTweets = () => dispatch => {
+export const fetchAllTweets = () => dispatch => {
   dispatch(fetchingTweets(true));
 
   axios
-    .get('/api/tweets/teams')
+    .get('/api/tweets')
     .then(({ data }) => {
       dispatch(fetchTweetsSuccess(data));
       dispatch(fetchingTweets(false));

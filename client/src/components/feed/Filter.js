@@ -1,12 +1,36 @@
 import React, { Component } from 'react';
-import { Menu, Input, Container, Label } from 'semantic-ui-react';
+import { Menu, Container, Label } from 'semantic-ui-react';
 import { connect } from 'react-redux';
+import { fetchAllTweets, fetchTweetsByTeams } from './../../actions/tweetsActions';
 
 class Filter extends Component {
-  state = { activeFilter: 'Favorites' };
+  state = { activeFilter: 'All' };
 
-  handleFilterClick = filter => {
-    this.setState({ activeFilter: filter });
+  componentDidMount() {
+    const { favorites } = this.props;
+
+    if (favorites && favorites.length) {
+      this.changeFilter('Favorites');
+    }
+  }
+
+  changeFilter = filter => {
+    const { fetchAllTweets, fetchTweetsByTeams, favorites } = this.props;
+
+    if (filter !== this.state.activeFilter) {
+      this.setState({ activeFilter: filter }, () => {
+        switch (filter) {
+          case 'All':
+            return fetchAllTweets();
+
+          case 'Favorites':
+            return fetchTweetsByTeams(favorites);
+
+          default:
+            return;
+        }
+      });
+    }
   };
 
   render() {
@@ -20,7 +44,7 @@ class Filter extends Component {
 
           <Menu.Item
             active={activeFilter === 'Favorites'}
-            onClick={() => this.handleFilterClick('Favorites')}>
+            onClick={() => this.changeFilter('Favorites')}>
             My Teams
             <Label color="blue">{favorites.length}</Label>
           </Menu.Item>
@@ -28,34 +52,34 @@ class Filter extends Component {
           <Menu.Item
             name="All"
             active={activeFilter === 'All'}
-            onClick={() => this.handleFilterClick('All')}
+            onClick={() => this.changeFilter('All')}
           />
 
-          <Menu.Menu position="right">
+          {/*<Menu.Menu position="right">
             <Menu.Item header>Filter:</Menu.Item>
 
             <Menu.Item
               name="Team"
               active={activeFilter === 'Team'}
-              onClick={() => this.handleFilterClick('Team')}
+              onClick={() => this.changeFilter('Team')}
             />
 
             <Menu.Item
               name="Player"
               active={activeFilter === 'Tweet'}
-              onClick={() => this.handleFilterClick('Tweet')}
+              onClick={() => this.changeFilter('Tweet')}
             />
 
             <Menu.Item
               name="Media"
               active={activeFilter === 'Article'}
-              onClick={() => this.handleFilterClick('Article')}
+              onClick={() => this.changeFilter('Article')}
             />
 
             <Menu.Item position="right">
               <Input className="icon" icon="search" placeholder="Search..." />
             </Menu.Item>
-          </Menu.Menu>
+    </Menu.Menu>*/}
         </Container>
       </Menu>
     );
@@ -66,7 +90,12 @@ const mapStateToProps = state => ({
   favorites: state.favorites
 });
 
+const mapDispatchToProps = dispatch => ({
+  fetchAllTweets: () => dispatch(fetchAllTweets()),
+  fetchTweetsByTeams: teams => dispatch(fetchTweetsByTeams(teams))
+});
+
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(Filter);

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, Icon, Divider } from 'semantic-ui-react';
 import { connect } from 'react-redux';
@@ -144,9 +144,11 @@ class FavoritesModal extends Component {
 
                   <h3>Current Teams</h3>
 
-                  {favorites.map((favorite, i) => {
-                    return <p key={i}>{favorite}</p>;
-                  })}
+                  {favorites.map((favorite, i) => (
+                    <p key={i} className="favorites-current-team">
+                      {favorite.replace(/-/g, ' ')}
+                    </p>
+                  ))}
                 </div>
               )}
             </div>
