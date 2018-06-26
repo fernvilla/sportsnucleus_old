@@ -86,7 +86,7 @@ class FavoritesModal extends Component {
               })}
               key={league._id}>
               {league.teams.map(team => {
-                const selected = favorites.indexOf(team.shortName) > -1;
+                const selected = favorites.indexOf(team.slug) > -1;
 
                 return (
                   <div
