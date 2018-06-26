@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Container, Menu, Dropdown, Segment } from 'semantic-ui-react';
+import { Container, Menu, Dropdown, Segment, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logoutUser } from './../../actions/authActions';
@@ -20,7 +20,8 @@ class SiteNav extends Component {
 
   render() {
     const {
-      leagues
+      leagues,
+      favorites
       // auth: {
       //   isAuthenticated,
       //   user: { isAdmin }
@@ -60,7 +61,9 @@ class SiteNav extends Component {
         <Menu borderless fluid inverted fixed="top" color="black" size="large">
           <Container>
             <Link to="/">
-              <Menu.Item name="home" />
+              <Menu.Item>
+                <Icon name="home" fitted />
+              </Menu.Item>
             </Link>
 
             <Dropdown item simple text="Team Feeds">
@@ -90,6 +93,20 @@ class SiteNav extends Component {
               </Dropdown.Menu>
             </Dropdown>
 
+            <Dropdown item simple text="My Teams">
+              <Dropdown.Menu>
+                {favorites.map(favorite => {
+                  return (
+                    <Dropdown.Item key={favorite}>
+                      <Link to={`/teams/${favorite}`} className="nav-link text-capitalize">
+                        {favorite.replace(/-/g, ' ')}
+                      </Link>
+                    </Dropdown.Item>
+                  );
+                })}
+              </Dropdown.Menu>
+            </Dropdown>
+
             {/*{isAuthenticated ? authLinks : guestLinks}*/}
           </Container>
         </Menu>
@@ -100,7 +117,8 @@ class SiteNav extends Component {
 
 const mapStateToProps = state => ({
   auth: state.auth,
-  leagues: state.leagues
+  leagues: state.leagues,
+  favorites: state.favorites
 });
 
 const mapDispatchToProps = dispatch => ({

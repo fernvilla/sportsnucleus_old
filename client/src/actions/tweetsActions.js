@@ -17,6 +17,21 @@ export const fetchTweetsSuccess = tweets => ({
   tweets
 });
 
+export const fetchLatestTweets = () => dispatch => {
+  dispatch(fetchingTweets(true));
+
+  axios
+    .get('/api/tweets/last_day')
+    .then(({ data }) => {
+      dispatch(fetchTweetsSuccess(data));
+      dispatch(fetchingTweets(false));
+    })
+    .catch(err => {
+      dispatch(fetchingTweets(false));
+      dispatch(fetchTweetsError(true));
+    });
+};
+
 export const fetchAllTweets = () => dispatch => {
   dispatch(fetchingTweets(true));
 
@@ -37,6 +52,21 @@ export const fetchTweetsByTeams = teams => dispatch => {
 
   axios
     .post(`/api/tweets/teams`, { teams })
+    .then(({ data }) => {
+      dispatch(fetchTweetsSuccess(data));
+      dispatch(fetchingTweets(false));
+    })
+    .catch(err => {
+      dispatch(fetchingTweets(false));
+      dispatch(fetchTweetsError(true));
+    });
+};
+
+export const fetchLatestTweetsByTeams = teams => dispatch => {
+  dispatch(fetchingTweets(true));
+
+  axios
+    .post(`/api/tweets/teams/last_day`, { teams })
     .then(({ data }) => {
       dispatch(fetchTweetsSuccess(data));
       dispatch(fetchingTweets(false));

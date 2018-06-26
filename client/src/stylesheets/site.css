@@ -1,3 +1,7 @@
 body {
   background-color: #f2f2f2 !important;
 }
+
+.text-capitalize {
+  text-transform: capitalize;
+}

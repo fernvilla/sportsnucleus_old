@@ -1,30 +1,30 @@
 import React, { Component } from 'react';
-import { Menu, Container, Label } from 'semantic-ui-react';
+import { Menu, Container, Label, Icon, Input } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { fetchAllTweets, fetchTweetsByTeams } from './../../actions/tweetsActions';
+import { fetchLatestTweets, fetchLatestTweetsByTeams } from './../../actions/tweetsActions';
 
 class Filter extends Component {
-  state = { activeFilter: 'All' };
+  state = { show: 'All' };
 
   componentDidMount() {
     const { favorites } = this.props;
 
     if (favorites && favorites.length) {
-      this.changeFilter('Favorites');
+      this.changeShown('Favorites');
     }
   }
 
-  changeFilter = filter => {
-    const { fetchAllTweets, fetchTweetsByTeams, favorites } = this.props;
+  changeShown = show => {
+    const { fetchLatestTweets, fetchLatestTweetsByTeams, favorites } = this.props;
 
-    if (filter !== this.state.activeFilter) {
-      this.setState({ activeFilter: filter }, () => {
-        switch (filter) {
+    if (show !== this.state.show) {
+      this.setState({ show }, () => {
+        switch (show) {
           case 'All':
-            return fetchAllTweets();
+            return fetchLatestTweets();
 
           case 'Favorites':
-            return fetchTweetsByTeams(favorites);
+            return fetchLatestTweetsByTeams(favorites);
 
           default:
             return;
@@ -35,51 +35,54 @@ class Filter extends Component {
 
   render() {
     const { favorites } = this.props;
-    const { activeFilter } = this.state;
+    const { show, filter } = this.state;
 
     return (
       <Menu borderless fluid>
         <Container>
-          <Menu.Item header>Show:</Menu.Item>
+          <Menu.Item header>
+            <Icon name="feed" />Feed view:
+          </Menu.Item>
 
-          <Menu.Item
-            active={activeFilter === 'Favorites'}
-            onClick={() => this.changeFilter('Favorites')}>
+          <Menu.Item active={show === 'Favorites'} onClick={() => this.changeShown('Favorites')}>
             My Teams
             <Label color="blue">{favorites.length}</Label>
           </Menu.Item>
 
           <Menu.Item
-            name="All"
-            active={activeFilter === 'All'}
-            onClick={() => this.changeFilter('All')}
+            name="All Teams"
+            active={show === 'All'}
+            onClick={() => this.changeShown('All')}
           />
 
-          {/*<Menu.Menu position="right">
-            <Menu.Item header>Filter:</Menu.Item>
+          <Menu.Menu position="right">
+            {/*<Menu.Item header>
+              <Icon name="filter" />Filter by:
+            </Menu.Item>
 
             <Menu.Item
               name="Team"
-              active={activeFilter === 'Team'}
+              active={filter === 'Team'}
               onClick={() => this.changeFilter('Team')}
             />
 
             <Menu.Item
               name="Player"
-              active={activeFilter === 'Tweet'}
+              active={filter === 'Tweet'}
               onClick={() => this.changeFilter('Tweet')}
             />
 
             <Menu.Item
               name="Media"
-              active={activeFilter === 'Article'}
+              active={filter === 'Article'}
               onClick={() => this.changeFilter('Article')}
             />
+            */}
 
             <Menu.Item position="right">
               <Input className="icon" icon="search" placeholder="Search..." />
             </Menu.Item>
-    </Menu.Menu>*/}
+          </Menu.Menu>
         </Container>
       </Menu>
     );
@@ -91,8 +94,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchAllTweets: () => dispatch(fetchAllTweets()),
-  fetchTweetsByTeams: teams => dispatch(fetchTweetsByTeams(teams))
+  fetchLatestTweets: () => dispatch(fetchLatestTweets()),
+  fetchLatestTweetsByTeams: teams => dispatch(fetchLatestTweetsByTeams(teams))
 });
 
 export default connect(
