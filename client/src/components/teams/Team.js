@@ -53,7 +53,7 @@ class Team extends Component {
 
     tweets = tweets.sort((a, b) => new Date(a) - new Date(b));
 
-    return <Feed items={tweets} />;
+    return <Feed items={tweets} isLoading={fetchingTeam} hideFilter />;
   }
 
   render() {

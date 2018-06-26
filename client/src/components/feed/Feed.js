@@ -8,7 +8,7 @@ import Filter from './Filter';
 
 momentCustom();
 
-const Feed = ({ items, isLoading }) => {
+const Feed = ({ items, isLoading, hideFilter }) => {
   const renderFeed = () => {
     if (isLoading) return <Loader />;
 
@@ -19,7 +19,7 @@ const Feed = ({ items, isLoading }) => {
 
   return (
     <div>
-      <Filter />
+      {!hideFilter && <Filter />}
 
       <Segment basic>
         <Container>
@@ -40,7 +40,12 @@ const Feed = ({ items, isLoading }) => {
 };
 
 Feed.propTypes = {
-  isLoading: PropTypes.bool.isRequired
+  isLoading: PropTypes.bool.isRequired,
+  hideFilter: PropTypes.bool
+};
+
+Feed.defaultProps = {
+  hideFilter: false
 };
 
 export default Feed;

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { uploadToS3 } = require('./../utils/s3');
+const he = require('he');
 
 const Schema = mongoose.Schema;
 const TweetSchema = new Schema(
@@ -44,6 +45,8 @@ TweetSchema.pre('save', function(next) {
 
   Tweet.find({ tweetId: self.tweetId }, (err, docs) => {
     if (!docs.length) {
+      self.text = !self.text ? self.text : he.decode(self.text);
+
       if (self.imageUrl) {
         const imagePath = `${self.tweetId}.${self.imageUrl.split('.').pop()}`;
 
