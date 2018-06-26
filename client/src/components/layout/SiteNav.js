@@ -21,11 +21,11 @@ class SiteNav extends Component {
   render() {
     const {
       leagues,
-      favorites
-      // auth: {
-      //   isAuthenticated,
-      //   user: { isAdmin }
-      // }
+      favorites,
+      auth: {
+        isAuthenticated,
+        user: { isAdmin }
+      }
     } = this.props;
 
     // const authLinks = (
@@ -55,6 +55,16 @@ class SiteNav extends Component {
     //     </Link>
     //   </Menu.Menu>
     // );
+
+    const adminLink = (
+      <Menu.Menu position="right">
+        <Link to="/admin/dashboard">
+          <Menu.Item name="admin dashboard" />
+        </Link>
+
+        <Menu.Item name="logout" link onClick={this.onLogoutClick} />
+      </Menu.Menu>
+    );
 
     return (
       <Segment basic>
@@ -108,6 +118,7 @@ class SiteNav extends Component {
             </Dropdown>
 
             {/*{isAuthenticated ? authLinks : guestLinks}*/}
+            {isAuthenticated && isAdmin && adminLink}
           </Container>
         </Menu>
       </Segment>
