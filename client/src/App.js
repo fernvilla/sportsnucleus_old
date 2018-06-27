@@ -35,7 +35,8 @@ reduxStore.dispatch(fetchTeams());
 reduxStore.subscribe(
   throttle(() => {
     saveState({
-      favorites: reduxStore.getState().favorites
+      favorites: reduxStore.getState().favorites,
+      bookmarks: reduxStore.getState().bookmarks
     });
   }, 1000)
 );

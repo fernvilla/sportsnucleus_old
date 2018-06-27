@@ -77,11 +77,11 @@ class Filter extends Component {
               active={filter === 'Article'}
               onClick={() => this.changeFilter('Article')}
             />
-            */}
-
+            
             <Menu.Item position="right">
               <Input className="icon" icon="search" placeholder="Search..." />
             </Menu.Item>
+            */}
           </Menu.Menu>
         </Container>
       </Menu>

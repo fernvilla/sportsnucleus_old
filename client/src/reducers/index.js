@@ -12,6 +12,7 @@ import {
 import { teams, fetchTeamsError, fetchingTeams, fetchingTeam, team } from './teamsReducer';
 import { auth, loggingInUser, registeringUser } from './authReducer';
 import { favorites } from './favoritesReducer';
+import { bookmarks } from './bookmarksReducer';
 
 export default combineReducers({
   form,
@@ -32,5 +33,6 @@ export default combineReducers({
   fetchingTeams,
   fetchingTeam,
   team,
-  favorites
+  favorites,
+  bookmarks
 });

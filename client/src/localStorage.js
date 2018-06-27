@@ -3,7 +3,8 @@ import store from 'store';
 export const loadState = () => {
   try {
     return {
-      favorites: store.get('favorites')
+      favorites: store.get('favorites'),
+      bookmarks: store.get('bookmarks')
     };
   } catch (err) {
     console.log(err);
@@ -12,9 +13,10 @@ export const loadState = () => {
 };
 
 export const saveState = state => {
-  const { favorites } = state;
+  const { favorites, bookmarks } = state;
 
   try {
     store.set('favorites', favorites);
+    store.set('bookmarks', bookmarks);
   } catch (err) {}
 };
