@@ -75,6 +75,7 @@ router
     Team.findOne({ slug: req.params.slug })
       .populate({
         path: 'tweets',
+        options: { sort: { published: -1 } },
         populate: {
           path: 'twitterAccount',
           model: 'TwitterAccount',

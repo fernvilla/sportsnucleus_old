@@ -4,7 +4,7 @@ const moment = require('moment');
 const startDate = moment()
   .startOf('day')
   .toDate();
-const endDat = moment(startDate)
+const endDate = moment(startDate)
   .subtract(1, 'weeks')
   .toDate();
 const Tweet = require('./../models/Tweet');
@@ -20,9 +20,9 @@ let deleteCount = 0;
 
 const getTweets = () => {
   Tweet.find({})
-    .populate('team')
+    .populate('twitterAccount')
     .where('published')
-    .lt(endDat)
+    .lt(endDate)
     .exec((err, tweets) => {
       if (err) return console.log(`Error fetching tweets: ${err}`);
       if (!tweets.length) return disconnectDb();
