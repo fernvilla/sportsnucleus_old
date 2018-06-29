@@ -29,7 +29,7 @@ const Feed = ({ items, isLoading, hideFilter }) => {
               percentPosition: true,
               transitionDuration: 0
             }}>
-            <Card.Group itemsPerRow={3} stackable doubling>
+            <Card.Group itemsPerRow={4} stackable doubling>
               {renderFeed()}
             </Card.Group>
           </Masonry>
