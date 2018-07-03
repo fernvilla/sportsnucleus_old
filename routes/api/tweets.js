@@ -56,8 +56,8 @@ router.route('/teams/paginated').post((req, res) => {
       foreignField: '_id',
       as: 'team'
     })
-    .unwind('$team')
     .match({ 'team.slug': { $in: teams } })
+    .unwind('$team')
     .lookup({
       from: 'twitteraccounts',
       localField: 'twitterAccount',
@@ -65,8 +65,6 @@ router.route('/teams/paginated').post((req, res) => {
       as: 'twitterAccount'
     })
     .unwind('twitterAccount')
-    .limit(recordsPerPage)
-    .skip((currentPage - 1) * recordsPerPage)
     .project({
       tweetId: 1,
       text: 1,
@@ -79,6 +77,8 @@ router.route('/teams/paginated').post((req, res) => {
       'twitterAccount.screenName': 1
     })
     .sort({ published: -1 })
+    .limit((currentPage - 1) * recordsPerPage + recordsPerPage)
+    .skip((currentPage - 1) * recordsPerPage)
     .exec((err, tweets) => {
       if (err) {
         return res.status(500).json({

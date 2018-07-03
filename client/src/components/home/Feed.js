@@ -36,7 +36,7 @@ class Feed extends Component {
   changeShown = show => {
     if (show !== this.state.show) {
       this.setState({ show, items: [], hasMore: true }, () => {
-        this.fetchHandler();
+        this.fetchHandler(1);
       });
     }
   };
