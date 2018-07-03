@@ -1,63 +1,30 @@
-import React, { Component, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { Container, Header, Segment } from 'semantic-ui-react';
-import { connect } from 'react-redux';
-import { fetchLatestTweets, fetchLatestTweetsByTeams } from './../../actions/tweetsActions';
-import { Feed, FavoritesModal } from './../../components';
+import { FavoritesModal } from './../../components';
+import Feed from './Feed';
 
 import './../../stylesheets/home.css';
 
-class Home extends Component {
-  componentDidMount() {
-    const { fetchLatestTweets, fetchLatestTweetsByTeams, favorites } = this.props;
+const Home = () => {
+  return (
+    <Fragment>
+      <Segment inverted vertical className="hero" textAlign="center">
+        <Container text>
+          <Header as="h1" inverted className="hero-main">
+            Sports Nucleus
+          </Header>
 
-    if (favorites && favorites.length) {
-      fetchLatestTweetsByTeams(favorites);
-    } else {
-      fetchLatestTweets();
-    }
-  }
+          <Header as="h2" inverted className="hero-secondary">
+            The center of your sports universe.
+          </Header>
 
-  renderFeed() {
-    const { fetchingTweets, tweets } = this.props;
+          <FavoritesModal />
+        </Container>
+      </Segment>
 
-    return <Feed items={tweets} isLoading={fetchingTweets} />;
-  }
+      <Feed />
+    </Fragment>
+  );
+};
 
-  render() {
-    return (
-      <Fragment>
-        <Segment inverted vertical className="hero" textAlign="center">
-          <Container text>
-            <Header as="h1" inverted className="hero-main">
-              Sports Nucleus
-            </Header>
-
-            <Header as="h2" inverted className="hero-secondary">
-              The center of your sports universe.
-            </Header>
-
-            <FavoritesModal />
-          </Container>
-        </Segment>
-
-        {this.renderFeed()}
-      </Fragment>
-    );
-  }
-}
-
-const mapStateToProps = state => ({
-  tweets: state.tweets,
-  favorites: state.favorites,
-  fetchingTweets: state.fetchingTweets
-});
-
-const mapDispatchToProps = dispatch => ({
-  fetchLatestTweets: () => dispatch(fetchLatestTweets()),
-  fetchLatestTweetsByTeams: teams => dispatch(fetchLatestTweetsByTeams(teams))
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Home);
+export default Home;

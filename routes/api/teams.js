@@ -72,26 +72,16 @@ router
 router
   .route('/:slug')
   .get((req, res) => {
-    Team.findOne({ slug: req.params.slug })
-      .populate({
-        path: 'tweets',
-        options: { sort: { published: -1 } },
-        populate: {
-          path: 'twitterAccount',
-          model: 'TwitterAccount',
-          select: 'screenName'
-        }
-      })
-      .exec((err, team) => {
-        if (err) {
-          return res.status(400).json({
-            error: err,
-            message: 'There was an error retrieving team.'
-          });
-        }
+    Team.findOne({ slug: req.params.slug }).exec((err, team) => {
+      if (err) {
+        return res.status(400).json({
+          error: err,
+          message: 'There was an error retrieving team.'
+        });
+      }
 
-        res.json(team);
-      });
+      res.json(team);
+    });
   })
   .put((req, res) => {
     Team.findByIdAndUpdate(req.params.team_id, req.body, { new: true }, (err, team) => {

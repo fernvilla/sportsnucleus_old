@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import DocumentTitle from 'react-document-title';
-import { Feed, TeamHeader, Loader } from './../../components';
+import { Loader } from './../../components';
+import Feed from './Feed';
+import TeamHeader from './TeamHeader';
 import { fetchTeam } from './../../actions/teamsActions';
 
 class Team extends Component {
@@ -23,46 +25,25 @@ class Team extends Component {
     } = nextProps;
     const currentTeam = this.props.match.params.team;
 
-    if (team !== currentTeam) {
-      this.fetchTeam(team);
-    }
+    if (team !== currentTeam) this.fetchTeam(team);
   }
 
   fetchTeam(team) {
     this.props.fetchTeam(team);
   }
 
-  renderFeed() {
-    const { team, fetchingTeam, hasErrored } = this.props;
+  render() {
+    const { team, fetchingTeam } = this.props;
 
     if (fetchingTeam) {
       return <Loader />;
     }
 
-    if (hasErrored) {
-      return <p>Error fetching team</p>;
-    }
-
-    let tweets = [];
-
-    team.tweets.map(t => {
-      t.team = team;
-
-      return tweets.push(t);
-    });
-
-    return <Feed items={tweets} isLoading={fetchingTeam} hideFilter />;
-  }
-
-  render() {
-    const { team } = this.props;
-
     return (
       <DocumentTitle title={`Sports Nucleus - ${team.name}`}>
         <div className="team-page">
           <TeamHeader team={team} />
-
-          {this.renderFeed()}
+          <Feed team={team.slug} />;
         </div>
       </DocumentTitle>
     );

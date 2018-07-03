@@ -3,8 +3,11 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Card, Image, Icon, Popup } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import momentCustom from './../../utils/momentCustom';
 
 import './../../stylesheets/tweet.css';
+
+momentCustom();
 
 const Tweet = ({ tweet }) => {
   const {

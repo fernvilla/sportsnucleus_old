@@ -21,9 +21,9 @@
     "redux-form": "^7.4.2",
     "redux-thunk": "^2.3.0",
     "semantic-ui-css": "^2.3.2",
-    "semantic-ui-react": "^0.81.2",
+    "semantic-ui-react": "^0.81.3",
     "store": "^2.0.12",
-    "sweetalert2": "^7.24.1"
+    "sweetalert2": "^7.24.4"
   },
   "scripts": {
     "start": "react-scripts start",

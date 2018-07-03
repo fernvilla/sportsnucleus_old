@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import DocumentTitle from 'react-document-title';
-import { Feed, LeagueHeader, Loader } from './../../components';
+import { Loader } from './../../components';
+import Feed from './Feed';
+import LeagueHeader from './LeagueHeader';
 import { fetchLeague } from './../../actions/leaguesActions';
 
 class League extends Component {

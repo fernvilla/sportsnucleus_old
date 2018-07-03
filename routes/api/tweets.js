@@ -2,11 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Tweet = require('./../../models/Tweet');
 const TwitterAccount = require('./../../models/TwitterAccount');
-const moment = require('moment');
-const start = moment()
-  .subtract(24, 'hours')
-  .toDate();
 
+// Get all tweets
 router.route('/').get((req, res) => {
   Tweet.find({})
     .lean()
@@ -25,83 +22,68 @@ router.route('/').get((req, res) => {
     });
 });
 
-router.route('/teams').post((req, res) => {
-  Tweet.find({})
+// Get all w/pagination
+router.post('/paginated', (req, res) => {
+  const { currentPage, recordsPerPage } = req.body;
+
+  Tweet.find()
     .lean()
     .populate('twitterAccount', 'screenName')
     .populate('team', 'name slug')
-    .sort({ published: 'desc' })
-    .exec((err, tweets) => {
-      if (err) {
-        return res.status(500).json({
-          error: err,
-          message: 'There was an error retrieving tweets.'
-        });
-      }
-      const { teams } = req.body;
-
-      if (!teams || !teams.length) return res.json([]);
-
-      let newTweets = [];
-
-      teams.map(team => {
-        const filtered = tweets.filter(t => t.team.slug === team);
-
-        return (newTweets = [...newTweets, ...filtered]);
-      });
-
-      newTweets.sort((a, b) => new Date(b.published) - new Date(a.published));
-
-      res.json(newTweets);
-    });
-});
-
-router.route('/teams/last_day').post((req, res) => {
-  Tweet.find({})
-    .lean()
-    .populate('twitterAccount', 'screenName')
-    .populate('team', 'name slug')
-    .sort({ published: 'desc' })
-    .where('published')
-    .gte(start)
-    .exec((err, tweets) => {
-      if (err) {
-        return res.status(500).json({
-          error: err,
-          message: 'There was an error retrieving tweets.'
-        });
-      }
-      const { teams } = req.body;
-
-      if (!teams || !teams.length) return res.json([]);
-
-      let newTweets = [];
-
-      teams.map(team => {
-        const filtered = tweets.filter(t => t.team.slug === team);
-
-        return (newTweets = [...newTweets, ...filtered]);
-      });
-
-      newTweets.sort((a, b) => new Date(b.published) - new Date(a.published));
-
-      res.json(newTweets);
-    });
-});
-
-router.get('/last_day', (req, res) => {
-  Tweet.find({})
-    .lean()
-    .populate('twitterAccount', 'screenName')
-    .populate('team', 'name slug')
-    .where('published')
-    .gte(start)
-    .sort({ published: 'desc' })
+    .sort({ published: -1 })
+    .limit(recordsPerPage)
+    .skip((currentPage - 1) * recordsPerPage)
     .exec((err, tweets) => {
       if (err) {
         return res.status(500).json({
           error: err,
           message: 'There was an error retrieving tweets'
+        });
+      }
+
+      res.json(tweets);
+    });
+});
+
+// Get all tweets for specified teams w/pagination
+router.route('/teams/paginated').post((req, res) => {
+  const { currentPage, recordsPerPage, teams } = req.body;
+
+  Tweet.aggregate()
+    .lookup({
+      from: 'teams',
+      localField: 'team',
+      foreignField: '_id',
+      as: 'team'
+    })
+    .unwind('$team')
+    .match({ 'team.slug': { $in: teams } })
+    .lookup({
+      from: 'twitteraccounts',
+      localField: 'twitterAccount',
+      foreignField: '_id',
+      as: 'twitterAccount'
+    })
+    .unwind('twitterAccount')
+    .limit(recordsPerPage)
+    .skip((currentPage - 1) * recordsPerPage)
+    .project({
+      tweetId: 1,
+      text: 1,
+      profileImageUrl: 1,
+      created: 1,
+      published: 1,
+      imageUrl: 1,
+      'team.slug': 1,
+      'team.name': 1,
+      'twitterAccount.screenName': 1
+    })
+    .sort({ published: -1 })
+    .exec((err, tweets) => {
+      if (err) {
+        return res.status(500).json({
+          error: err,
+          message: 'There was an error retrieving tweets.'
         });
       }
 

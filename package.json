@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@sendgrid/mail": "^6.3.1",
-    "aws-sdk": "^2.263.1",
+    "aws-sdk": "^2.266.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "chalk": "^2.4.1",
@@ -29,11 +29,11 @@
     "helmet": "^3.12.1",
     "jsonwebtoken": "^8.3.0",
     "moment": "^2.22.2",
-    "mongoose": "^5.1.6",
+    "mongoose": "^5.1.7",
     "morgan": "~1.9.0",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
-    "twit": "^2.2.10",
+    "twit": "^2.2.11",
     "validator": "^10.4.0"
   },
   "devDependencies": {
