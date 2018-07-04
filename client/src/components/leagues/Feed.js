@@ -15,7 +15,7 @@ class Feed extends Component {
   };
 
   static propTypes = {
-    league: PropTypes.object.isRequired
+    league: PropTypes.string.isRequired
   };
 
   recordsPerPage = 20;

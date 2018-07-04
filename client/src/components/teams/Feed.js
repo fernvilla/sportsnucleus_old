@@ -16,7 +16,7 @@ class Feed extends Component {
   };
 
   static propTypes = {
-    team: PropTypes.object.isRequired
+    team: PropTypes.string.isRequired
   };
 
   recordsPerPage = 20;

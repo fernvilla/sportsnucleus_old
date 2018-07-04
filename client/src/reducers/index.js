@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux';
 import { reducer as form } from 'redux-form';
 import { errors } from './errorReducer';
-import { tweets, fetchTweetsError, fetchingTweets } from './tweetsReducer';
 import {
   leagues,
   fetchLeaguesError,
@@ -20,9 +19,6 @@ export default combineReducers({
   auth,
   loggingInUser,
   registeringUser,
-  // tweets,
-  // fetchTweetsError,
-  // fetchingTweets,
   leagues,
   fetchLeaguesError,
   fetchingLeagues,
