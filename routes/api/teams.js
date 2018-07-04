@@ -70,9 +70,9 @@ router
   });
 
 router
-  .route('/:slug')
+  .route('/:team')
   .get((req, res) => {
-    Team.findOne({ slug: req.params.slug }).exec((err, team) => {
+    Team.findOne({ slug: req.params.team }).exec((err, team) => {
       if (err) {
         return res.status(400).json({
           error: err,
@@ -84,7 +84,7 @@ router
     });
   })
   .put((req, res) => {
-    Team.findByIdAndUpdate(req.params.team_id, req.body, { new: true }, (err, team) => {
+    Team.findByIdAndUpdate(req.params.team, req.body, { new: true }, (err, team) => {
       if (err) {
         return res.status(400).json({
           error: err,
@@ -96,7 +96,7 @@ router
     });
   })
   .delete((req, res) => {
-    Team.findByIdAndRemove(req.params.team_id, (err, team) => {
+    Team.findByIdAndRemove(req.params.team, (err, team) => {
       if (err)
         return res.status(400).json({
           error: err,
