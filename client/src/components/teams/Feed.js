@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
 import { Card, Container, Segment } from 'semantic-ui-react';
 import Masonry from 'react-masonry-component';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -13,10 +15,13 @@ class Feed extends Component {
     items: []
   };
 
+  static propTypes = {
+    team: PropTypes.object.isRequired
+  };
+
   recordsPerPage = 20;
 
   fetchTweets = page => {
-    console.log('page', page);
     const { team } = this.props;
 
     axios
@@ -26,8 +31,6 @@ class Feed extends Component {
         teams: [team]
       })
       .then(({ data }) => {
-        console.log(data);
-
         if (!data.length) return this.setState({ hasMore: false });
 
         this.setState(prevState => ({

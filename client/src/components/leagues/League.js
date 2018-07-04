@@ -34,41 +34,18 @@ class League extends Component {
     this.props.fetchLeague(league);
   }
 
-  renderFeed() {
-    const { league, fetchingLeague, hasErrored } = this.props;
+  render() {
+    const { league, fetchingLeague } = this.props;
 
     if (fetchingLeague) {
       return <Loader />;
     }
 
-    if (hasErrored) {
-      return <p>Error fetching league</p>;
-    }
-
-    let tweets = [];
-
-    league.teams.map(team => {
-      return team.tweets.map(t => {
-        t.team = team;
-
-        return tweets.push(t);
-      });
-    });
-
-    tweets = tweets.sort((a, b) => new Date(a) - new Date(b));
-
-    return <Feed items={tweets} />;
-  }
-
-  render() {
-    const { league } = this.props;
-
     return (
       <DocumentTitle title={`Sports Nucleus - ${league.name}`}>
         <div className="league-page">
           <LeagueHeader league={league} />
-
-          {this.renderFeed()}
+          <Feed league={league.slug} />
         </div>
       </DocumentTitle>
     );

@@ -29,54 +29,60 @@ class Feed extends Component {
     this.state = {
       hasMore: true,
       items: [],
-      show: hasFavorites ? 'Favorites' : 'All'
+      show: hasFavorites ? 'Favorites' : 'All',
+      currentPage: 1
     };
+  }
+
+  componentDidMount() {
+    this.fetchHandler();
   }
 
   changeShown = show => {
     if (show !== this.state.show) {
-      this.setState({ show, items: [], hasMore: true }, () => {
-        this.fetchHandler(1);
-      });
+      this.setState(
+        {
+          show,
+          items: [],
+          hasMore: true,
+          currentPage: 1
+        },
+        () => this.fetchHandler()
+      );
     }
   };
 
-  fetchHandler = page => {
-    const { show } = this.state;
+  fetchHandler = () => {
+    const { show, currentPage } = this.state;
 
     switch (show) {
       case 'All':
-        return this.fetchAll(page);
+        return this.fetchAll(currentPage);
       case 'Favorites':
-        return this.fetchByFavorites(page);
+        return this.fetchByFavorites(currentPage);
       default:
         return;
     }
   };
 
   fetchAll = page => {
-    console.log('page', page);
-
     axios
       .post('/api/tweets/paginated', {
         currentPage: page,
         recordsPerPage: this.recordsPerPage
       })
       .then(({ data }) => {
-        console.log(data);
-
         if (!data.length) return this.setState({ hasMore: false });
 
         this.setState(prevState => ({
-          items: [...prevState.items, ...data]
+          items: [...prevState.items, ...data],
+          currentPage: prevState.currentPage + 1
         }));
       })
       .catch(err => console.error(err));
   };
 
   fetchByFavorites = page => {
-    console.log('page', page);
-
     const { favorites } = this.props;
 
     axios
@@ -86,12 +92,11 @@ class Feed extends Component {
         teams: favorites
       })
       .then(({ data }) => {
-        console.log(data);
-
         if (!data.length) return this.setState({ hasMore: false });
 
         this.setState(prevState => ({
-          items: [...prevState.items, ...data]
+          items: [...prevState.items, ...data],
+          currentPage: prevState.currentPage + 1
         }));
       })
       .catch(err => console.error(err));
@@ -131,9 +136,9 @@ class Feed extends Component {
         <Segment basic className="feed-container">
           <Container fluid>
             <InfiniteScroll
-              pageStart={0}
               loadMore={this.fetchHandler}
               hasMore={hasMore}
+              initialLoad={false}
               loader={<Loader key={0} />}>
               <Masonry
                 options={{

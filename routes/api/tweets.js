@@ -91,6 +91,61 @@ router.route('/teams/paginated').post((req, res) => {
     });
 });
 
+// Get all tweets for specified league w/pagination
+router.route('/league/paginated').post((req, res) => {
+  const { currentPage, recordsPerPage, league } = req.body;
+
+  Tweet.aggregate()
+    .lookup({
+      from: 'teams',
+      localField: 'team',
+      foreignField: '_id',
+      as: 'team'
+    })
+    .unwind('$team')
+    .lookup({
+      from: 'twitteraccounts',
+      localField: 'twitterAccount',
+      foreignField: '_id',
+      as: 'twitterAccount'
+    })
+    .unwind('twitterAccount')
+    .lookup({
+      from: 'leagues',
+      localField: 'team.league',
+      foreignField: '_id',
+      as: 'league'
+    })
+    .unwind('league')
+    .match({ 'league.slug': league })
+    .project({
+      tweetId: 1,
+      text: 1,
+      profileImageUrl: 1,
+      created: 1,
+      published: 1,
+      imageUrl: 1,
+      'team.slug': 1,
+      'team.name': 1,
+      'twitterAccount.screenName': 1
+    })
+    .sort({ published: -1 })
+    .limit((currentPage - 1) * recordsPerPage + recordsPerPage)
+    .skip((currentPage - 1) * recordsPerPage)
+    .exec((err, tweets) => {
+      if (err) {
+        return res.status(500).json({
+          error: err,
+          message: 'There was an error retrieving tweets.'
+        });
+      }
+
+      console.log(tweets);
+
+      res.json(tweets);
+    });
+});
+
 router.route('/:tweet_id').delete((req, res) => {
   Tweet.findByIdAndRemove(req.params.tweet_id, (err, tweet) => {
     if (err)

@@ -3,7 +3,7 @@ const router = express.Router();
 const passport = require('passport');
 
 const Profile = require('./../../models/Profile');
-const User = require('./../../models/User');
+// const User = require('./../../models/User');
 
 router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
   console.log(req);

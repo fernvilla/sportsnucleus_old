@@ -72,31 +72,16 @@ router
 router
   .route('/:slug')
   .get((req, res) => {
-    League.findOne({ slug: req.params.slug })
-      .populate({
-        path: 'teams',
-        select: 'name slug',
-        populate: {
-          path: 'tweets',
-          model: 'Tweet',
-          select: '-createdAt -updatedAt',
-          populate: {
-            path: 'twitterAccount',
-            model: 'TwitterAccount',
-            select: 'screenName'
-          }
-        }
-      })
-      .exec((err, league) => {
-        if (err) {
-          return res.status(400).json({
-            error: err,
-            message: 'There was an error retrieving league.'
-          });
-        }
+    League.findOne({ slug: req.params.slug }).exec((err, league) => {
+      if (err) {
+        return res.status(400).json({
+          error: err,
+          message: 'There was an error retrieving league.'
+        });
+      }
 
-        res.json(league);
-      });
+      res.json(league);
+    });
   })
   .put((req, res) => {
     League.findByIdAndUpdate(req.params.league_id, req.body, { new: true }, (err, league) => {
