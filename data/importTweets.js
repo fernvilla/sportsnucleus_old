@@ -5,6 +5,7 @@ const Team = require('./../models/Team');
 const Tweet = require('./../models/Tweet');
 const Twit = require('twit');
 const mongoose = require('mongoose');
+const { sendErrorEmail } = require('./../utils/email');
 
 require('./../config/database.js');
 
@@ -61,6 +62,14 @@ const processTweets = twitterAccount => {
       exclude_replies: true
     },
     (err, data, response) => {
+      if (err) {
+        const errorText = `Tweet fetch error for screen name ${screenName}: ${JSON.stringify(
+          err
+        )} ${JSON.stringify(err)}}`;
+
+        sendErrorEmail(errorText);
+      }
+
       if (err || !data.length) return checkForDisconnect();
 
       totalTweets = data.length;
