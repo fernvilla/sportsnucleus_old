@@ -130,28 +130,26 @@ class FavoritesModal extends Component {
           open={showModal}
           centered={false}>
           <Modal.Content className="favorites-container">
-            <div className="favorites-container">
-              <h2>Set My Teams</h2>
+            <h2>Set My Teams</h2>
 
-              <div className="favorites-section">
-                {this.renderLeagues()}
-                {this.renderTeams()}
-              </div>
-
-              {!!favorites.length && (
-                <div>
-                  <Divider inverted />
-
-                  <h3>Current Teams</h3>
-
-                  {favorites.map((favorite, i) => (
-                    <p key={i} className="favorites-current-team">
-                      {favorite.replace(/-/g, ' ')}
-                    </p>
-                  ))}
-                </div>
-              )}
+            <div className="favorites-section">
+              {this.renderLeagues()}
+              {this.renderTeams()}
             </div>
+
+            {!!favorites.length && (
+              <div>
+                <Divider inverted />
+
+                <h3>Current Teams</h3>
+
+                {favorites.map((favorite, i) => (
+                  <p key={i} className="favorites-current-team">
+                    {favorite.replace(/-/g, ' ')}
+                  </p>
+                ))}
+              </div>
+            )}
           </Modal.Content>
         </Modal>
       </div>
