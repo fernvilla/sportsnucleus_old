@@ -129,7 +129,7 @@ class FavoritesModal extends Component {
           closeIcon
           open={showModal}
           centered={false}>
-          <div>
+          <Modal.Content className="favorites-container">
             <div className="favorites-container">
               <h2>Set My Teams</h2>
 
@@ -152,7 +152,7 @@ class FavoritesModal extends Component {
                 </div>
               )}
             </div>
-          </div>
+          </Modal.Content>
         </Modal>
       </div>
     );

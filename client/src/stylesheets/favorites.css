@@ -1,8 +1,7 @@
 .favorites-container {
-  background-color: #25384f;
+  background-color: #25384f !important;
   color: #fff;
   text-align: left;
-  padding: 2em 1.5em 1.5em;
 }
 
 .favorites-section {
