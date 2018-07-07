@@ -77,7 +77,7 @@ class SiteNav extends Component {
             </Link>
 
             <Dropdown item simple text="Team Feeds">
-              <Dropdown.Menu scrolling>
+              <Dropdown.Menu>
                 {leagues.map(league => {
                   return (
                     <Dropdown.Item key={league._id}>
@@ -86,7 +86,7 @@ class SiteNav extends Component {
                         {league.shortName}
                       </Link>
 
-                      <Dropdown.Menu scrolling style={{ overflowY: 'auto' }}>
+                      <Dropdown.Menu className="dropdown-limited-menu">
                         {league.teams.map(team => {
                           return (
                             <Dropdown.Item key={team._id}>
@@ -104,7 +104,7 @@ class SiteNav extends Component {
             </Dropdown>
 
             <Dropdown item simple text="My Teams">
-              <Dropdown.Menu scrolling>
+              <Dropdown.Menu>
                 {favorites.map(favorite => {
                   return (
                     <Dropdown.Item key={favorite}>

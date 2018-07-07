@@ -8,3 +8,8 @@
   background: -webkit-linear-gradient(top, #45484d 0%, #000000 100%) !important;
   background: linear-gradient(to bottom, #45484d 0%, #000000 100%) !important;
 }
+
+.dropdown-limited-menu {
+  height: 400px;
+  overflow-y: auto;
+}
