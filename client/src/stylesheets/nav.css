@@ -10,6 +10,6 @@
 }
 
 .dropdown-limited-menu {
-  height: 400px;
-  overflow-y: auto;
+  height: 400px !important;
+  overflow-y: auto !important;
 }
