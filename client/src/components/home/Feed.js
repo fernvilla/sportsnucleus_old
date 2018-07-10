@@ -115,7 +115,7 @@ class Feed extends Component {
   render() {
     const { hasMore, show } = this.state;
     const { profile } = this.props;
-    const favorites = profile ? (profile.favorites.length ? profile.favorites : []) : [];
+    const favorites = profile ? (profile.favorites ? profile.favorites : []) : [];
 
     return (
       <div>

@@ -48,10 +48,9 @@ class FavoritesModal extends Component {
   };
 
   selectTeam = (e, team) => {
-    const {
-      profile: { favorites }
-    } = this.props;
-    const selected = favorites && favorites.map(item => item._id).indexOf(team._id) > -1;
+    const { profile } = this.props;
+    const favorites = profile ? (profile.favorites ? profile.favorites : []) : [];
+    const selected = !!favorites.length && favorites.map(item => item._id).indexOf(team._id) > -1;
 
     if (!selected) return this.addFavorite(team);
 

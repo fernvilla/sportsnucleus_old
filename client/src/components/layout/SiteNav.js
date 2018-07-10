@@ -26,12 +26,14 @@ class SiteNav extends Component {
   render() {
     const {
       leagues,
-      profile: { favorites },
+      profile,
       auth: {
         isAuthenticated,
         user: { isAdmin }
       }
     } = this.props;
+
+    const favorites = profile ? (profile.favorites ? profile.favorites : []) : [];
 
     const authLinks = (
       <Menu.Menu position="right">
@@ -58,7 +60,7 @@ class SiteNav extends Component {
     );
 
     const myTeams = () => {
-      if (!favorites || !favorites.length) return null;
+      if (!favorites.length) return null;
 
       return (
         <Dropdown item simple text="My Teams">
