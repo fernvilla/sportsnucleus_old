@@ -22,7 +22,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
 });
 
 router.post('/favorites', passport.authenticate('jwt', { session: false }), (req, res) => {
-  Profile.findOneAndUpdate({ user: req.body.userId }, req.body, {
+  Profile.findOneAndUpdate({ user: req.user.id }, req.body, {
     upsert: true,
     new: true,
     setDefaultsOnInsert: true
