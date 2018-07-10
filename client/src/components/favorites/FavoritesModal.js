@@ -3,17 +3,28 @@ import PropTypes from 'prop-types';
 import { Button, Modal, Icon, Divider } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
+
 import { addFavorite, removeFavorite } from './../../actions/profileActions';
 
 import './../../stylesheets/favorites.css';
 
 class FavoritesModal extends Component {
+  static contextTypes = {
+    router: PropTypes.object
+  };
+
   state = {
     showModal: false,
     hoveredLeague: ''
   };
 
   handleOpen = () => {
+    const {
+      auth: { isAuthenticated }
+    } = this.props;
+
+    if (!isAuthenticated) return this.context.router.history.push('/login');
+
     this.setState({ showModal: true });
   };
 
