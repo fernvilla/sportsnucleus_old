@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import App from './App';
 import reduxStore from './store';
-import registerServiceWorker from './registerServiceWorker';
+// import registerServiceWorker from './registerServiceWorker';
 
 import 'semantic-ui-css/semantic.min.css';
 import './stylesheets/site.css';
@@ -20,4 +20,4 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-registerServiceWorker();
+// registerServiceWorker();
