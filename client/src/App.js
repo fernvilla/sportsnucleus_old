@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { Provider } from 'react-redux';
+import { connect } from 'react-redux';
 import jwt_decode from 'jwt-decode';
 import store from 'store';
-import throttle from 'lodash/throttle';
-import { saveState } from './localStorage';
 import setAuthToken from './utils/setAuthToken';
 import { setCurrentUser, logoutUser } from './actions/authActions';
+import { clearCurrentProfile } from './actions/profileActions';
+import { getCurrentProfile } from './actions/profileActions';
 import { fetchTeams } from './actions/teamsActions';
 import { fetchLeagues } from './actions/leaguesActions';
 import reduxStore from './store';
@@ -25,47 +25,54 @@ if (jwtToken) {
 
   if (decoded.exp < currentTime) {
     reduxStore.dispatch(logoutUser());
+    reduxStore.dispatch(clearCurrentProfile());
     window.location.href = '/';
   }
 }
 
-// Grab "initial state" for app
-reduxStore.dispatch(fetchLeagues());
-reduxStore.dispatch(fetchTeams());
-reduxStore.subscribe(
-  throttle(() => {
-    saveState({
-      favorites: reduxStore.getState().favorites,
-      bookmarks: reduxStore.getState().bookmarks
-    });
-  }, 1000)
-);
-
 class App extends Component {
+  componentDidMount() {
+    const { fetchLeagues, fetchTeams, getCurrentProfile } = this.props;
+
+    fetchLeagues();
+    fetchTeams();
+
+    const isAuthenticated = reduxStore.getState().auth.isAuthenticated;
+
+    if (isAuthenticated) getCurrentProfile();
+  }
+
   render() {
     return (
-      <Provider store={reduxStore}>
-        <Router>
-          <div>
-            <SiteNav />
+      <Router>
+        <Fragment>
+          <SiteNav />
 
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/signup" component={Register} />
-            <Switch>
-              <AdminRoute path="/admin" component={Admin} />
-            </Switch>
-            <Switch>
-              <Route exact path="/teams/:team" component={Team} />
-            </Switch>
-            <Switch>
-              <Route exact path="/leagues/:league" component={League} />
-            </Switch>
-            <Route exact path="/" component={Home} />
-          </div>
-        </Router>
-      </Provider>
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/signup" component={Register} />
+          <Switch>
+            <AdminRoute path="/admin" component={Admin} />
+          </Switch>
+          <Switch>
+            <Route exact path="/teams/:team" component={Team} />
+          </Switch>
+          <Switch>
+            <Route exact path="/leagues/:league" component={League} />
+          </Switch>
+          <Route exact path="/" component={Home} />
+        </Fragment>
+      </Router>
     );
   }
 }
 
-export default App;
+const mapDispatchToProps = dispatch => ({
+  fetchLeagues: () => dispatch(fetchLeagues()),
+  fetchTeams: () => dispatch(fetchTeams()),
+  getCurrentProfile: () => dispatch(getCurrentProfile())
+});
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(App);

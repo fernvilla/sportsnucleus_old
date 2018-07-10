@@ -10,7 +10,7 @@ import {
 } from './leaguesReducer';
 import { teams, fetchTeamsError, fetchingTeams, fetchingTeam, team } from './teamsReducer';
 import { auth, loggingInUser, registeringUser } from './authReducer';
-import { favorites } from './favoritesReducer';
+import { profile } from './profileReducer';
 import { bookmarks } from './bookmarksReducer';
 
 export default combineReducers({
@@ -29,6 +29,6 @@ export default combineReducers({
   fetchingTeams,
   fetchingTeam,
   team,
-  favorites,
+  profile,
   bookmarks
 });

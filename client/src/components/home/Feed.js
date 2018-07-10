@@ -23,13 +23,14 @@ class Feed extends Component {
   constructor(props) {
     super(props);
 
-    const { favorites } = this.props;
-    const hasFavorites = favorites && favorites.length;
+    const {
+      profile: { favorites }
+    } = this.props;
 
     this.state = {
       hasMore: true,
       items: [],
-      show: hasFavorites ? 'Favorites' : 'All',
+      show: favorites && !!favorites.length ? 'Favorites' : 'All',
       currentPage: 1
     };
   }
@@ -83,13 +84,16 @@ class Feed extends Component {
   };
 
   fetchByFavorites = page => {
-    const { favorites } = this.props;
+    const {
+      profile: { favorites }
+    } = this.props;
+    const slugs = favorites.map(f => f.slug);
 
     axios
       .post('/api/tweets/teams/paginated', {
         currentPage: page,
         recordsPerPage: this.recordsPerPage,
-        teams: favorites
+        teams: slugs
       })
       .then(({ data }) => {
         if (!data.length) return this.setState({ hasMore: false });
@@ -110,19 +114,15 @@ class Feed extends Component {
 
   render() {
     const { hasMore, show } = this.state;
-    const { favorites } = this.props;
+    const { profile } = this.props;
+    const favorites = profile ? profile.favorites : [];
 
     return (
       <div>
         <Menu borderless fluid>
           <Container>
             <Menu.Item header>
-              <Icon name="feed" />Feed:
-            </Menu.Item>
-
-            <Menu.Item active={show === 'Favorites'} onClick={() => this.changeShown('Favorites')}>
-              My Teams
-              <Label color="blue">{favorites.length}</Label>
+              <Icon name="feed" />View Feed:
             </Menu.Item>
 
             <Menu.Item
@@ -130,6 +130,11 @@ class Feed extends Component {
               active={show === 'All'}
               onClick={() => this.changeShown('All')}
             />
+
+            <Menu.Item active={show === 'Favorites'} onClick={() => this.changeShown('Favorites')}>
+              My Teams
+              <Label color="blue">{favorites.length}</Label>
+            </Menu.Item>
           </Container>
         </Menu>
 
@@ -159,7 +164,7 @@ class Feed extends Component {
 }
 
 const mapStateToProps = state => ({
-  favorites: state.favorites
+  profile: state.profile
 });
 
 export default connect(

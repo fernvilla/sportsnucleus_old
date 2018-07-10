@@ -7,8 +7,8 @@ const ProfileSchema = new Schema({
     ref: 'User',
     required: true
   },
-  favoriteTeams: {
-    type: [String]
+  favorites: {
+    type: [{}]
   }
 });
 

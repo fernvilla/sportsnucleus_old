@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Modal, Icon, Divider } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
-import { addFavoriteTeam, removeFavoriteTeam } from './../../actions/favoritesActions';
+import { addFavorite, removeFavorite } from './../../actions/profileActions';
 
 import './../../stylesheets/favorites.css';
 
@@ -22,11 +22,14 @@ class FavoritesModal extends Component {
   };
 
   addFavorite = team => {
-    this.props.addFavoriteTeam(team);
+    const { addFavorite } = this.props;
+    addFavorite(team);
   };
 
   removeFavorite = team => {
-    this.props.removeFavoriteTeam(team);
+    const { removeFavorite } = this.props;
+
+    removeFavorite(team);
   };
 
   setHoveredLeague = league => {
@@ -34,12 +37,12 @@ class FavoritesModal extends Component {
   };
 
   selectTeam = (e, team) => {
-    const { favorites } = this.props;
-    const selected = favorites.indexOf(team) > -1;
+    const {
+      profile: { favorites }
+    } = this.props;
+    const selected = favorites && favorites.map(item => item._id).indexOf(team._id) > -1;
 
-    if (!selected) {
-      return this.addFavorite(team);
-    }
+    if (!selected) return this.addFavorite(team);
 
     return this.removeFavorite(team);
   };
@@ -73,7 +76,7 @@ class FavoritesModal extends Component {
   }
 
   renderTeams() {
-    const { leagues, favorites } = this.props;
+    const { leagues, profile } = this.props;
     const { hoveredLeague } = this.state;
 
     return (
@@ -86,14 +89,17 @@ class FavoritesModal extends Component {
               })}
               key={league._id}>
               {league.teams.map(team => {
-                const selected = favorites.indexOf(team.slug) > -1;
+                const selected =
+                  profile &&
+                  profile.favorites &&
+                  profile.favorites.map(item => item._id).indexOf(team._id) > -1;
 
                 return (
                   <div
                     className={classNames('favorites-team', {
                       selected: selected
                     })}
-                    onClick={e => this.selectTeam(e, team.slug)}
+                    onClick={e => this.selectTeam(e, team)}
                     key={team._id}>
                     {team.shortName}
 
@@ -112,9 +118,33 @@ class FavoritesModal extends Component {
     );
   }
 
+  renderFavorites() {
+    const { profile } = this.props;
+
+    if (!profile) return null;
+
+    const { favorites } = profile;
+
+    return (
+      favorites &&
+      !!favorites.length && (
+        <div>
+          <Divider inverted />
+
+          <h3>Current Teams</h3>
+
+          {favorites.map((favorite, i) => (
+            <p key={i} className="favorites-current-team">
+              {favorite.name}
+            </p>
+          ))}
+        </div>
+      )
+    );
+  }
+
   render() {
     const { showModal } = this.state;
-    const { favorites } = this.props;
 
     return (
       <div>
@@ -137,19 +167,7 @@ class FavoritesModal extends Component {
               {this.renderTeams()}
             </div>
 
-            {!!favorites.length && (
-              <div>
-                <Divider inverted />
-
-                <h3>Current Teams</h3>
-
-                {favorites.map((favorite, i) => (
-                  <p key={i} className="favorites-current-team">
-                    {favorite.replace(/-/g, ' ')}
-                  </p>
-                ))}
-              </div>
-            )}
+            {this.renderFavorites()}
           </Modal.Content>
         </Modal>
       </div>
@@ -158,21 +176,21 @@ class FavoritesModal extends Component {
 }
 
 FavoritesModal.propTypes = {
-  favorites: PropTypes.array.isRequired,
+  profile: PropTypes.object,
   leagues: PropTypes.array.isRequired,
-  addFavoriteTeam: PropTypes.func.isRequired,
-  removeFavoriteTeam: PropTypes.func.isRequired
+  addFavorite: PropTypes.func.isRequired,
+  removeFavorite: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => {
-  const { favorites, leagues } = state;
-
-  return { favorites, leagues };
+FavoritesModal.defaultProps = {
+  profile: {}
 };
+
+const mapStateToProps = ({ profile, leagues, auth }) => ({ profile, leagues, auth });
 
 const mapDispatchToProps = dispatch => ({
-  addFavoriteTeam: team => dispatch(addFavoriteTeam(team)),
-  removeFavoriteTeam: team => dispatch(removeFavoriteTeam(team))
+  addFavorite: team => dispatch(addFavorite(team)),
+  removeFavorite: team => dispatch(removeFavorite(team))
 });
 
 export default connect(

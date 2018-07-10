@@ -22,6 +22,7 @@ export default class Users extends Component {
     axios
       .get('/api/users')
       .then(({ data }) => {
+        console.log(data);
         this.setState({ users: data, usersFetched: true });
       })
       .catch(err => console.error(err));

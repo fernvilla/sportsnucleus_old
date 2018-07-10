@@ -28,7 +28,7 @@ export const fetchingTeams = (state = true, action) => {
 
 export const teams = (state = [], action) => {
   switch (action.type) {
-    case (FETCH_TEAMS_SUCCESS, FETCH_TEAMS_SUCCESS):
+    case FETCH_TEAMS_SUCCESS:
       return action.teams;
 
     default:

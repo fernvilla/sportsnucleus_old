@@ -4,6 +4,7 @@ import jwt_decode from 'jwt-decode';
 import store from 'store';
 
 import { GET_ERRORS, SET_CURRENT_USER, REGISTERING_USER, LOGGING_IN_USER } from './types';
+import { getCurrentProfile } from './profileActions';
 
 export const registeringUser = bool => ({
   type: REGISTERING_USER,
@@ -48,6 +49,7 @@ export const loginUser = userData => dispatch => {
       store.set('jwtToken', token);
       setAuthToken(token);
       dispatch(setCurrentUser(jwt_decode(token)));
+      dispatch(getCurrentProfile());
     })
     .catch(err => {
       dispatch(loggingInUser(false));
