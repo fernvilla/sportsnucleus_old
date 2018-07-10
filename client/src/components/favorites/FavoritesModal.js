@@ -111,7 +111,7 @@ class FavoritesModal extends Component {
                     })}
                     onClick={e => this.selectTeam(e, team)}
                     key={team._id}>
-                    {team.shortName}
+                    {team.name}
 
                     <Icon
                       inverted
