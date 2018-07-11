@@ -22,6 +22,7 @@ export default class Leagues extends Component {
     axios
       .get('/api/leagues')
       .then(({ data }) => {
+        console.log(data);
         this.setState({ leagues: data, leaguesFetched: true });
       })
       .catch(err => console.error(err));
@@ -107,6 +108,7 @@ export default class Leagues extends Component {
                 <Table.HeaderCell>Short Name</Table.HeaderCell>
                 <Table.HeaderCell>Slug</Table.HeaderCell>
                 <Table.HeaderCell>Website</Table.HeaderCell>
+                <Table.HeaderCell># Teams</Table.HeaderCell>
                 <Table.HeaderCell>Actions</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
@@ -123,6 +125,7 @@ export default class Leagues extends Component {
                         {l.website}
                       </a>
                     </Table.Cell>
+                    <Table.Cell>{l.teams.length}</Table.Cell>
                     <Table.Cell>
                       <Button primary size="tiny" onClick={() => this.editHandler(l)}>
                         Edit
