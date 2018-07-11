@@ -87,7 +87,7 @@ class Register extends Component {
 
                   {errors.email &&
                     !!errors.email.length && (
-                      <Label basic color="red" pointing>
+                      <Label color="red" pointing>
                         {errors.email}
                       </Label>
                     )}
@@ -109,7 +109,7 @@ class Register extends Component {
 
                   {errors.password &&
                     !!errors.password.length && (
-                      <Label basic color="red" pointing>
+                      <Label color="red" pointing>
                         {errors.password}
                       </Label>
                     )}
@@ -131,7 +131,7 @@ class Register extends Component {
 
                   {errors.passwordConfirm &&
                     !!errors.passwordConfirm.length && (
-                      <Label basic color="red" pointing>
+                      <Label color="red" pointing>
                         {errors.passwordConfirm}
                       </Label>
                     )}
