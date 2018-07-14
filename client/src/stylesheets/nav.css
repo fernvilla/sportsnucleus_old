@@ -3,10 +3,7 @@
 }
 
 .ui.inverted.menu {
-  background: #45484d !important;
-  background: -moz-linear-gradient(top, #45484d 0%, #000000 100%) !important;
-  background: -webkit-linear-gradient(top, #45484d 0%, #000000 100%) !important;
-  background: linear-gradient(to bottom, #45484d 0%, #000000 100%) !important;
+  background: #1e2a3a !important;
 }
 
 .dropdown-limited-menu {

@@ -81,7 +81,7 @@ class SiteNav extends Component {
 
     return (
       <Segment basic>
-        <Menu borderless fluid inverted fixed="top" color="black" size="large">
+        <Menu borderless fluid inverted fixed="top" color="black" size="huge">
           <Container>
             <Link to="/">
               <Menu.Item>
