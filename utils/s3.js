@@ -30,7 +30,14 @@ const uploadToS3 = (imgPath, subfolder, filename) => {
       },
       (err, res, body) => {
         if (err) {
-          console.log(('saving image err', err));
+          if (!isDebug) {
+            const errorText = `Image request error for ${imgPath}: ${JSON.stringify(
+              err
+            )} ${JSON.stringify(err.stack)}}`;
+
+            sendErrorEmail(errorText);
+          }
+
           return reject(err);
         }
 
@@ -42,9 +49,19 @@ const uploadToS3 = (imgPath, subfolder, filename) => {
             Body: body
           },
           (err, res) => {
-            if (err) reject(err);
+            if (err) {
+              if (!isDebug) {
+                const errorText = `Add image error for ${imgPath}: ${JSON.stringify(
+                  err
+                )} ${JSON.stringify(err.stack)}}`;
 
-            resolve(`${cdnPath}/${key}`);
+                sendErrorEmail(errorText);
+              }
+
+              return reject(err);
+            }
+
+            return resolve(`${cdnPath}/${key}`);
           }
         );
       }
@@ -64,11 +81,11 @@ const deleteFromS3 = imgPath => {
     s3.deleteObject(params, (err, data) => {
       if (err) {
         if (!isDebug) {
-          var errorText = `Delete image error for ${imgPath}: ${JSON.stringify(
+          const errorText = `Delete image error for ${imgPath}: ${JSON.stringify(
             err
           )} ${JSON.stringify(err.stack)}}`;
 
-          return sendErrorEmail(errorText);
+          sendErrorEmail(errorText);
         }
 
         return reject(err);
